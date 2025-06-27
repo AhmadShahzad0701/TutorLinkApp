@@ -9,7 +9,7 @@ export default function Index() {
         alignItems: "center",
       }}
     >
-      <Text>We are Building Tutor Link App</Text>
+      <Text>We are Building Tutor Link App.</Text>
     </View>
   );
 }
