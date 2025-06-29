@@ -6,7 +6,7 @@ import HomeScreen from './screens/HomeScreen';
 const Index = () => {
   return (
     <View style={{ flex: 1 }}>
-      {/* <Header /> */}
+
       <HomeScreen />
     </View>
   );

@@ -1,30 +1,28 @@
 // components/Header.jsx
-import { Feather, MaterialIcons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import { MaterialIcons } from '@expo/vector-icons';
+import { DrawerActions, useNavigation } from '@react-navigation/native';
+import { useRouter } from 'expo-router';
 import { Image, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 
 const Header = () => {
-  const navigation = useNavigation(); // ✅ Hook for controlling drawer
+  const navigation = useNavigation(); 
+  const router = useRouter();         
 
   return (
     <View style={styles.container}>
       <View style={styles.topBar}>
-        <TouchableOpacity onPress={() => navigation.openDrawer()}>
-          <Feather name="menu" size={28} color="#0B60B0" />
+        <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
+          <MaterialIcons name="menu" size={28} color="#0B60B0" />
         </TouchableOpacity>
 
-        <Image
-          source={require('../../assets/images/Logo.png')}
-          style={styles.logo}
-        />
+        <Image source={require('../../assets/images/Logo.png')} style={styles.logo} />
 
-        <TouchableOpacity onPress={() => navigation.navigate('screens/Login')}>
+        <TouchableOpacity onPress={() => router.push('/screens/Login')}>
           <MaterialIcons name="login" size={28} color="#0B60B0" />
         </TouchableOpacity>
       </View>
 
       <View style={styles.searchBar}>
-        <Feather name="search" size={20} color="#666" />
         <TextInput
           placeholder="Search tutor..."
           style={styles.input}
@@ -40,7 +38,7 @@ export default Header;
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#E6F0FA',
-    paddingTop: 40,
+    paddingTop: 50,
     paddingBottom: 10,
     paddingHorizontal: 15,
     elevation: 5,
@@ -48,6 +46,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     shadowOffset: { width: 0, height: 2 },
+    zIndex: 1000,
   },
   topBar: {
     flexDirection: 'row',

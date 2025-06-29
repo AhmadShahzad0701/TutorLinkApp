@@ -1,16 +1,15 @@
-import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Image,
-  StyleSheet,
-  ScrollView,
-  Alert,
-} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
+import { useState } from 'react';
+import {
+  Alert,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity
+} from 'react-native';
 
 const SignUp = () => {
   const navigation = useNavigation();
@@ -31,7 +30,6 @@ const SignUp = () => {
       return;
     }
 
-    // Replace this with real signup logic
     console.log('User signed up:', { name, email });
 
     navigation.navigate('Home');
@@ -98,10 +96,9 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   logo: {
-    width: 120,
-    height: 120,
-    resizeMode: 'contain',
-    marginBottom: 20,
+    width: 150,
+    height: 150,
+    borderRadius: 100,
   },
   heading: {
     fontSize: 24,
