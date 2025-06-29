@@ -1,15 +1,16 @@
-import { Text, View } from 'react-native';
+// app/index.jsx
+import React from 'react';
+import { View } from 'react-native';
 import Header from './components/Header';
+import HomeScreen from './screens/HomeScreen';
 
-const HomeScreen = () => {
+const Index = () => {
   return (
     <View style={{ flex: 1 }}>
       <Header />
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Welcome to Tutor Link HomeScreen</Text>
-      </View>
+      <HomeScreen />
     </View>
   );
 };
 
-export default HomeScreen;
+export default Index;
