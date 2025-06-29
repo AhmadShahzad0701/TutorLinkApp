@@ -6,7 +6,7 @@ const HomeScreen = () => {
     <View style={{ flex: 1 }}>
       <Header />
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Welcome to Tutor Link HomeScreen!</Text>
+        <Text>Welcome to Tutor Link HomeScreen</Text>
       </View>
     </View>
   );
