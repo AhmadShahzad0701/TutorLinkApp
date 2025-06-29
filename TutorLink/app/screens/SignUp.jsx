@@ -10,9 +10,11 @@ import {
   Alert,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useRouter } from 'expo-router';
 
 const SignUp = () => {
   const navigation = useNavigation();
+  const router = useRouter();
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -79,7 +81,7 @@ const SignUp = () => {
         Already have an account?{' '}
         <Text
           style={styles.link}
-          onPress={() => navigation.navigate('Login')}>
+          onPress={() => router.push('/screens/Login')}>
           Log in
         </Text>
       </Text>
