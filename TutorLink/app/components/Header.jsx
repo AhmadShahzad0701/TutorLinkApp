@@ -1,24 +1,17 @@
 import { useRouter } from 'expo-router';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View, TextInput, Image } from 'react-native';
+import { Feather } from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons';
 
 const Header = () => {
   const router = useRouter();
-  // const Drawer = createDrawerNavigator()
 
   return (
     <View style={styles.container}>
-
-      {/* <View style={styles.topBar}>
-
+      <View style={styles.topBar}>
         <TouchableOpacity onPress={() => {}}>
           <Feather name="menu" size={28} color="#0B60B0" />
         </TouchableOpacity>
-        <Drawer.Navigator>
-          <Drawer.Screen name="Home" component={HomeScreen} />
-          <Drawer.Screen name="Profile" component={ProfileScreen} />
-        </Drawer.Navigator>
-
-
 
         <Image
           source={require('../../assets/images/Logo.png')}
@@ -30,7 +23,6 @@ const Header = () => {
         </TouchableOpacity>
       </View>
 
-
       <View style={styles.searchBar}>
         <Feather name="search" size={20} color="#666" />
         <TextInput
@@ -38,7 +30,7 @@ const Header = () => {
           style={styles.input}
           placeholderTextColor="#999"
         />
-      </View> */}
+      </View>
     </View>
   );
 };

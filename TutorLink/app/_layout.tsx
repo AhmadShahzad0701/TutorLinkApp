@@ -1,11 +1,11 @@
-// app/_layout.js
 import { Stack } from 'expo-router';
+import { Drawer } from 'expo-router/drawer';
 
 export default function Layout() {
   return (
-    <Stack>
-      <Stack.Screen name="index" options={{ headerShown: false }} />
-      {/* <Stack.Screen name="login" options={{ title: "Tutor Login" }}/> */}
-    </Stack>
+    <Drawer>
+      <Drawer.Screen name="index" options={{ title: 'Home' }} />
+      <Drawer.Screen name="screens/Profile" options={{ title: 'Profile' }} />
+    </Drawer>
   );
 }
