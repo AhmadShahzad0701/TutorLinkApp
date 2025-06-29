@@ -1,15 +1,15 @@
-import { useRouter } from 'expo-router';
-import { StyleSheet, TouchableOpacity, View, TextInput, Image } from 'react-native';
-import { Feather } from '@expo/vector-icons';
-import { MaterialIcons } from '@expo/vector-icons';
+// components/Header.jsx
+import { Feather, MaterialIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import { Image, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
 
 const Header = () => {
-  const router = useRouter();
+  const navigation = useNavigation(); // ✅ Hook for controlling drawer
 
   return (
     <View style={styles.container}>
       <View style={styles.topBar}>
-        <TouchableOpacity onPress={() => {}}>
+        <TouchableOpacity onPress={() => navigation.openDrawer()}>
           <Feather name="menu" size={28} color="#0B60B0" />
         </TouchableOpacity>
 
@@ -18,7 +18,7 @@ const Header = () => {
           style={styles.logo}
         />
 
-        <TouchableOpacity onPress={() => router.push('/screens/Login')}>
+        <TouchableOpacity onPress={() => navigation.navigate('screens/Login')}>
           <MaterialIcons name="login" size={28} color="#0B60B0" />
         </TouchableOpacity>
       </View>
