@@ -11,22 +11,27 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-const Login = () => {
+const SignUp = () => {
   const navigation = useNavigation();
 
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
-  const handleLogin = () => {
-    if (!email || !password) {
-      Alert.alert('Error', 'Please enter both email and password.');
+  const handleSignUp = () => {
+    if (!name || !email || !password || !confirmPassword) {
+      Alert.alert('Error', 'All fields are required.');
+      return;
+    }
+    if (password !== confirmPassword) {
+      Alert.alert('Error', 'Passwords do not match.');
       return;
     }
 
-    // Handle login logic here
-    console.log('User logged in:', { email });
+    // Replace this with real signup logic
+    console.log('User signed up:', { name, email });
 
-    // Navigate to Home screen after login
     navigation.navigate('Home');
   };
 
@@ -36,14 +41,19 @@ const Login = () => {
         source={require('../../assets/images/Logo.png')}
         style={styles.logo}
       />
-      <Text style={styles.heading}>Welcome Back</Text>
+      <Text style={styles.heading}>Create Your Account</Text>
 
+      <TextInput
+        placeholder="Full Name"
+        value={name}
+        onChangeText={setName}
+        style={styles.input}
+      />
       <TextInput
         placeholder="Email"
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
-        autoCapitalize="none"
         style={styles.input}
       />
       <TextInput
@@ -53,17 +63,24 @@ const Login = () => {
         secureTextEntry
         style={styles.input}
       />
+      <TextInput
+        placeholder="Confirm Password"
+        value={confirmPassword}
+        onChangeText={setConfirmPassword}
+        secureTextEntry
+        style={styles.input}
+      />
 
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Login</Text>
+      <TouchableOpacity style={styles.button} onPress={handleSignUp}>
+        <Text style={styles.buttonText}>Sign Up</Text>
       </TouchableOpacity>
 
       <Text style={styles.footerText}>
-        Don’t have an account?{' '}
+        Already have an account?{' '}
         <Text
           style={styles.link}
-          onPress={() => navigation.navigate('SignUp')}>
-          Sign Up
+          onPress={() => navigation.navigate('Login')}>
+          Log in
         </Text>
       </Text>
     </ScrollView>
@@ -130,4 +147,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Login;
+export default SignUp;
