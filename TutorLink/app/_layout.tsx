@@ -30,6 +30,21 @@ export default function Layout() {
           headerShown: false 
         }}  
       />
+
+      <Drawer.Screen
+        name="screens/Profile"
+         options={{
+          title: 'Profile'
+          }}
+       />
+      
+      <Drawer.Screen
+        name="screens/EditProfile"
+        options={{
+          title: 'Edit Profile',
+          drawerItemStyle: { display: 'none' } 
+        }}
+      />
     </Drawer>
   );
 }

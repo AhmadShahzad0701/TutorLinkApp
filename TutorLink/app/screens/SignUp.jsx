@@ -8,8 +8,10 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity
+  TouchableOpacity,
+  View, // ✅ Added for layout
 } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons'; // ✅ For back icon
 
 const SignUp = () => {
   const navigation = useNavigation();
@@ -37,6 +39,14 @@ const SignUp = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      {/* ✅ Back Icon */}
+      <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => router.replace('/')}
+      >
+        <MaterialIcons name="arrow-back" size={28} color="#4f46e5" />
+      </TouchableOpacity>
+
       <Image
         source={require('../../assets/images/Logo.png')}
         style={styles.logo}
@@ -94,6 +104,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#f9fafb',
     alignItems: 'center',
     flexGrow: 1,
+  },
+  backButton: {
+    position: 'absolute',
+    top: 50,
+    left: 20,
+    zIndex: 10,
   },
   logo: {
     width: 150,

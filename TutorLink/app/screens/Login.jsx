@@ -1,20 +1,19 @@
-import { useNavigation } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import {
   Alert,
-  Image,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity
+  TouchableOpacity,
+  View,
+  Image,
 } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
 
 const Login = () => {
-  const navigation = useNavigation();
   const router = useRouter();
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -25,69 +24,87 @@ const Login = () => {
     }
 
     console.log('User logged in:', { email });
-
-    navigation.navigate('Home');
+    router.replace('/'); // Navigate to home page
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView style={styles.screen} contentContainerStyle={styles.scroll}>
+      {/* Back Arrow */}
+      <TouchableOpacity style={styles.backButton} onPress={() => router.replace('/')}>
+        <MaterialIcons name="arrow-back" size={28} color="#4f46e5" />
+      </TouchableOpacity>
+
+      {/* Logo */}
       <Image
         source={require('../../assets/images/Logo.png')}
         style={styles.logo}
       />
-      <Text style={styles.heading}>Welcome Back</Text>
 
-      <TextInput
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-        style={styles.input}
-      />
+      <View style={styles.content}>
+        <Text style={styles.title}>TutorLink Login</Text>
 
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Login</Text>
-      </TouchableOpacity>
+        <TextInput
+          placeholder="Email"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
+          style={styles.input}
+        />
 
-      <Text style={styles.footerText}>
-        Don’t have an account?{' '}
-        <Text
-          style={styles.link}
-          onPress={() => router.push('/screens/SignUp')}>
-          Sign Up
+        <TextInput
+          placeholder="Password"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+          style={styles.input}
+        />
+
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+          <Text style={styles.buttonText}>Login</Text>
+        </TouchableOpacity>
+
+        <Text style={styles.footerText}>
+          Don’t have an account?{' '}
+          <Text style={styles.link} onPress={() => router.push('/screens/SignUp')}>
+            Sign Up
+          </Text>
         </Text>
-      </Text>
+      </View>
     </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    paddingVertical: 50,
-    paddingHorizontal: 25,
+  screen: {
     backgroundColor: '#f9fafb',
-    alignItems: 'center',
-    flexGrow: 1,
+    flex: 1,
   },
-
+  scroll: {
+    paddingBottom: 30,
+  },
+  backButton: {
+    marginTop: 50,
+    marginLeft: 20,
+  },
   logo: {
-    width: 150,
-    height: 150,
-    borderRadius: 100,
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    alignSelf: 'center',
+    marginTop: 10,
+    marginBottom: 10,
   },
-  heading: {
+  content: {
+    paddingHorizontal: 24,
+    width: '100%',
+  },
+  title: {
     fontSize: 24,
     fontWeight: '700',
     color: '#111827',
-    marginBottom: 30,
+    marginBottom: 20,
+    textAlign: 'center',
   },
   input: {
     width: '100%',
@@ -122,6 +139,7 @@ const styles = StyleSheet.create({
   footerText: {
     fontSize: 14,
     color: '#6b7280',
+    textAlign: 'center',
   },
   link: {
     color: '#4f46e5',
