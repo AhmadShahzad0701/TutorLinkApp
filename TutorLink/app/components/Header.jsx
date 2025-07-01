@@ -1,8 +1,10 @@
 // components/Header.jsx
 import { MaterialIcons } from '@expo/vector-icons';
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
 import { Image, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
+
 
 const Header = () => {
   const navigation = useNavigation(); 
@@ -12,13 +14,13 @@ const Header = () => {
     <View style={styles.container}>
       <View style={styles.topBar}>
         <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
-          <MaterialIcons name="menu" size={28} color="#0B60B0" />
+          <MaterialIcons name="menu" size={27} color="black" />
         </TouchableOpacity>
 
         <Image source={require('../../assets/images/Logo.png')} style={styles.logo} />
 
-        <TouchableOpacity onPress={() => router.push('/screens/Login')}>
-          <MaterialIcons name="login" size={28} color="#0B60B0" />
+        <TouchableOpacity onPress={() => router.push('/screens/Profile')}>
+        <FontAwesome6 name="user-gear" size={20} color="black" />
         </TouchableOpacity>
       </View>
 
@@ -37,40 +39,41 @@ export default Header;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#E6F0FA',
+    backgroundColor: '#7C8BA5',
     paddingTop: 50,
-    paddingBottom: 10,
+    paddingBottom: 17,
     paddingHorizontal: 15,
     elevation: 5,
     shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowRadius: 4,
     shadowOffset: { width: 0, height: 2 },
-    zIndex: 1000,
+    zIndex: 800,
+    borderRadius : 16,
   },
   topBar: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: 9,
   },
   logo: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 60,
+    height: 60,
+    borderRadius: 40,
   },
   searchBar: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#fff',
     borderRadius: 10,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
+    paddingHorizontal: 5,
+    paddingVertical: 0,
   },
   input: {
-    marginLeft: 8,
+    marginLeft: 5,
     fontSize: 16,
-    flex: 1,
+    flex : 1,
     color: '#333',
   },
 });

@@ -1,16 +1,16 @@
-import { useState } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-  Alert,
-} from 'react-native';
+import { Feather } from '@expo/vector-icons'; // optional for icons
 import * as ImagePicker from 'expo-image-picker';
 import { useRouter } from 'expo-router';
-import { Feather } from '@expo/vector-icons'; // optional for icons
+import { useState } from 'react';
+import {
+  Alert,
+  Image,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 
 const EditProfile = () => {
   const router = useRouter();
@@ -62,6 +62,7 @@ const EditProfile = () => {
           onChangeText={setName}
           style={styles.input}
         />
+        
         <TextInput
           placeholder="Email"
           value={email}
