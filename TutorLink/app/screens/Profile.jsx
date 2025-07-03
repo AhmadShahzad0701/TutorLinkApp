@@ -1,4 +1,4 @@
-import { Feather } from '@expo/vector-icons';
+import { Feather, MaterialIcons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
@@ -15,6 +15,8 @@ const Profile = () => {
     image,
   } = useLocalSearchParams();
 
+  const decodedImage = image ? decodeURIComponent(image) : null;
+
   const InfoRow = ({ icon, label, value, color }) => (
     <View style={styles.infoRow}>
       <Feather name={icon} size={18} color={color} style={styles.icon} />
@@ -27,13 +29,18 @@ const Profile = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      {/* Back to Home Button */}
+      <TouchableOpacity style={styles.backButton} onPress={() => router.replace('/')}>
+        <MaterialIcons name="arrow-back" size={28} color="#4f46e5" />
+      </TouchableOpacity>
+
       <View style={styles.header} />
 
       <View style={styles.card}>
         <Image
           source={
-            image && typeof image === 'string' && image.trim() !== ''
-              ? { uri: image }
+            decodedImage
+              ? { uri: decodedImage }
               : require('../../assets/images/placeholder.jpeg')
           }
           style={styles.avatar}
@@ -67,6 +74,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0f4f8',
     alignItems: 'center',
     paddingBottom: 40,
+  },
+  backButton: {
+    alignSelf: 'flex-start',
+    marginTop: 50,
+    marginLeft: 20,
   },
   header: {
     height: 140,

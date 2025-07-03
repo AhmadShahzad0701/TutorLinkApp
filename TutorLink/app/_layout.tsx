@@ -7,6 +7,7 @@ export default function Layout() {
   return (
     <Drawer>
 
+      {/* Home */}
       <Drawer.Screen 
         name="index" 
         options={{ 
@@ -14,35 +15,53 @@ export default function Layout() {
           header: () => <Header />  
         }}  
       />
-      
+
+      {/* Login */}
       <Drawer.Screen 
         name="screens/Login" 
         options={{ 
           title: 'Login',
-          headerShown: false        
+          headerShown: false,
+          drawerItemStyle: { display: 'none' } 
         }}  
       />
 
+      {/* Sign Up */}
       <Drawer.Screen 
         name="screens/SignUp" 
         options={{ 
           title: 'Sign Up',
-          headerShown: false 
+          headerShown: false,
+          drawerItemStyle: { display: 'none' }
         }}  
       />
 
+      {/* Profile */}
       <Drawer.Screen
         name="screens/Profile"
-         options={{
-          title: 'Profile'
-          }}
-       />
-      
+        options={{
+          title: 'Tutor Profile',
+          header: () => <Header />,
+        }}
+      />
+
+      {/* Edit Profile */}
       <Drawer.Screen
         name="screens/EditProfile"
         options={{
           title: 'Edit Profile',
-          drawerItemStyle: { display: 'none' } 
+          header: () => <Header />,
+          drawerItemStyle: { display: 'none' }
+        }}
+      />
+
+      {/* Optional: Create Profile page for tutors */}
+      <Drawer.Screen
+        name="screens/CreateProfile"
+        options={{
+          title: 'Create Profile',
+          header: () => <Header />,
+          drawerItemStyle: { display: 'none' },
         }}
       />
     </Drawer>

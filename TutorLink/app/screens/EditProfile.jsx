@@ -19,9 +19,9 @@ import {
 const EditProfile = () => {
   const router = useRouter();
 
-  const [name, setName] = useState('John Doe');
-  const [email, setEmail] = useState('john@example.com');
-  const [phone, setPhone] = useState('+92 300 1234567');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [education, setEducation] = useState('');
   const [subjects, setSubjects] = useState('');
   const [fee, setFee] = useState('');
@@ -53,6 +53,8 @@ const EditProfile = () => {
       return;
     }
 
+    const encodedImage = profileImage ? encodeURIComponent(profileImage) : '';
+
     router.replace({
       pathname: '/screens/Profile',
       params: {
@@ -63,7 +65,7 @@ const EditProfile = () => {
         subjects,
         location,
         fee,
-        image: profileImage,
+        image: encodedImage,
       },
     });
   };

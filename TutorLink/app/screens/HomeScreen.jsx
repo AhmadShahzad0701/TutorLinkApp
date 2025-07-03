@@ -1,12 +1,25 @@
 import { FontAwesome6, MaterialCommunityIcons, SimpleLineIcons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import React from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 const HomeScreen = () => {
+    const router = useRouter();
   return (
     <View style={styles.container}>
       <Text style={styles.subHeading}>Welcome to Tutor Link</Text>
       <Text style={styles.heading}>Find the Right Tutor For You!</Text>
+
+      <TouchableOpacity style={styles.tutorCard} onPress={() => router.push('/screens/EditProfile')}>
+        <FontAwesome6 name="user-plus" size={22} color="#black" />
+        <View style={styles.tutorCardTextWrapper}>
+          <Text style={styles.tutorCardTitle}>Become a Tutor</Text>
+          <Text style={styles.tutorCardSubtitle}>
+            Register as a tutor and start teaching now.
+          </Text>
+        </View>
+        <FontAwesome6 name="chevron-right" size={18} color="#6b7280" />
+      </TouchableOpacity>
 
       <View style={styles.section}>
         {/* Categories Title with Icon */}
@@ -101,6 +114,35 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: 'black',
+  },
+  tutorCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#EDEFF5',
+    padding: 16,
+    borderRadius: 14,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+    marginBottom: 20,
+    justifyContent: 'space-between',
+  },
+  tutorCardTextWrapper: {
+    flex: 1,
+    marginLeft: 12,
+    marginRight: 8,
+  },
+  tutorCardTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#1F2937',
+  },
+  tutorCardSubtitle: {
+    fontSize: 13,
+    color: '#6B7280',
+    marginTop: 4,
   },
   categoriesRow: {
     flexDirection: 'row',
