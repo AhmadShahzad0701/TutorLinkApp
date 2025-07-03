@@ -1,103 +1,160 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import { useRouter } from 'expo-router';
-import { Feather } from '@expo/vector-icons'; // For the edit icon
+import { Feather } from '@expo/vector-icons';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 const Profile = () => {
   const router = useRouter();
+  const {
+    name,
+    email,
+    phone,
+    education,
+    subjects,
+    location,
+    fee,
+    image,
+  } = useLocalSearchParams();
 
-  const user = {
-    name: 'John Doe',
-    email: 'john@example.com',
-    phone: '+92 300 1234567',
-    profileImage: require('../../assets/images/placeholder.jpeg'),
-  };
+  const InfoRow = ({ icon, label, value, color }) => (
+    <View style={styles.infoRow}>
+      <Feather name={icon} size={18} color={color} style={styles.icon} />
+      <View style={styles.infoBlock}>
+        <Text style={styles.label}>{label}</Text>
+        <Text style={styles.info}>{value}</Text>
+      </View>
+    </View>
+  );
 
   return (
-    <View style={styles.container}>
-      {/* Header Section */}
+    <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.header} />
 
-      {/* Profile Card */}
       <View style={styles.card}>
-        <Image source={user.profileImage} style={styles.avatar} />
+        <Image
+          source={
+            image && typeof image === 'string' && image.trim() !== ''
+              ? { uri: image }
+              : require('../../assets/images/placeholder.jpeg')
+          }
+          style={styles.avatar}
+        />
 
-        <Text style={styles.name}>{user.name}</Text>
-        <Text style={styles.info}>{user.email}</Text>
-        <Text style={styles.info}>{user.phone}</Text>
+        <Text style={styles.name}>{name}</Text>
+        <Text style={styles.role}>Professional Tutor</Text>
 
-        <TouchableOpacity
-          style={styles.editButton}
-          onPress={() => router.push('/screens/EditProfile')}
-        >
+        <View style={styles.divider} />
+
+        <View style={styles.section}>
+          <InfoRow icon="mail" label="Email" value={email} color="#6366F1" />
+          <InfoRow icon="phone" label="Phone" value={phone} color="#10B981" />
+          <InfoRow icon="book-open" label="Description" value={education} color="#F59E0B" />
+          <InfoRow icon="layers" label="Subjects" value={subjects} color="#EC4899" />
+          <InfoRow icon="dollar-sign" label="Fee" value={fee} color="#F43F5E" />
+          <InfoRow icon="map-pin" label="Location" value={location} color="#3B82F6" />
+        </View>
+
+        <TouchableOpacity style={styles.editButton} onPress={() => router.push('/screens/EditProfile')}>
           <Feather name="edit" size={18} color="#fff" />
           <Text style={styles.editText}>Edit Profile</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#f9fafb',
+    backgroundColor: '#f0f4f8',
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    paddingBottom: 40,
   },
   header: {
-    height: 120,
+    height: 140,
     width: '100%',
     backgroundColor: '#4f46e5',
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
+    borderBottomLeftRadius: 24,
+    borderBottomRightRadius: 24,
   },
   card: {
     backgroundColor: '#fff',
-    marginTop: -60,
-    paddingVertical: 30,
-    paddingHorizontal: 25,
-    borderRadius: 16,
+    marginTop: -80,
+    padding: 30,
+    borderRadius: 20,
+    width: '88%',
     alignItems: 'center',
-    width: '85%',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.1,
-    shadowRadius: 6,
-    elevation: 5,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 10,
   },
   avatar: {
-    width: 120,
-    height: 120,
-    borderRadius: 100,
-    marginBottom: 20,
-    borderWidth: 3,
+    width: 130,
+    height: 130,
+    borderRadius: 65,
+    borderWidth: 4,
     borderColor: '#4f46e5',
+    marginBottom: 16,
   },
   name: {
-    fontSize: 22,
+    fontSize: 24,
     fontWeight: '700',
-    color: '#111827',
-    marginBottom: 6,
+    color: '#1f2937',
+  },
+  role: {
+    fontSize: 16,
+    color: '#6b7280',
+    marginBottom: 10,
+  },
+  divider: {
+    width: '100%',
+    height: 1,
+    backgroundColor: '#e5e7eb',
+    marginVertical: 15,
+  },
+  section: {
+    width: '100%',
+  },
+  infoRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: 15,
+  },
+  icon: {
+    marginRight: 12,
+    marginTop: 5,
+  },
+  infoBlock: {
+    flex: 1,
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#374151',
   },
   info: {
     fontSize: 16,
-    color: '#6b7280',
-    marginBottom: 4,
+    color: '#4b5563',
   },
   editButton: {
     flexDirection: 'row',
     backgroundColor: '#4f46e5',
     paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 10,
+    paddingHorizontal: 26,
+    borderRadius: 12,
     marginTop: 30,
     alignItems: 'center',
+    shadowColor: '#4f46e5',
+    shadowOpacity: 0.3,
+    shadowOffset: { width: 0, height: 5 },
+    shadowRadius: 10,
+    elevation: 6,
   },
   editText: {
     color: '#fff',
     fontWeight: '600',
     fontSize: 16,
-    marginLeft: 8,
+    marginLeft: 10,
   },
 });
 

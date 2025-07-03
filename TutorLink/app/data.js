@@ -1,7 +1,7 @@
 const tutors = [
   {
     name: "Fatima Khan",
-    subject: "Biology, Chemistry",
+    subject: "Biology",
     rating: "4.8",
     price: "1500",
     location: "Karachi",
@@ -9,7 +9,7 @@ const tutors = [
   },
   {
     name: "Ali Raza",
-    subject: "English, History",
+    subject: "Language",
     rating: "4.7",
     price: "1000",
     location: "Islamabad",
@@ -17,53 +17,36 @@ const tutors = [
   },
   {
     name: "Ayesha Malik",
-    subject: "Computer Science",
+    subject: "Chemistry",
     rating: "5.0",
     price: "2000",
     location: "Lahore",
     imageUrl: "https://i.pravatar.cc/150?img=30",
   },
-    {
-    name: "Ayesha Malik",
-    subject: "Computer Science",
-    rating: "5.0",
-    price: "2000",
-    location: "Lahore",
-    imageUrl: "https://i.pravatar.cc/150?img=30",
+  {
+    name: "Usman Tariq",
+    subject: "Math",
+    rating: "4.9",
+    price: "1800",
+    location: "Faisalabad",
+    imageUrl: "https://i.pravatar.cc/150?img=36",
   },
-    {
-    name: "Ayesha Malik",
-    subject: "Computer Science",
-    rating: "5.0",
-    price: "2000",
-    location: "Lahore",
-    imageUrl: "https://i.pravatar.cc/150?img=30",
+  {
+    name: "Hira Sohail",
+    subject: "Philosophy",
+    rating: "4.6",
+    price: "1200",
+    location: "Multan",
+    imageUrl: "https://i.pravatar.cc/150?img=44",
   },
-    {
-    name: "Ayesha Malik",
-    subject: "Computer Science",
-    rating: "5.0",
-    price: "2000",
-    location: "Lahore",
-    imageUrl: "https://i.pravatar.cc/150?img=30",
+  {
+    name: "Zainab Noor",
+    subject: "Physics",
+    rating: "4.95",
+    price: "1900",
+    location: "Rawalpindi",
+    imageUrl: "https://i.pravatar.cc/150?img=50",
   },
-    {
-    name: "Ayesha Malik",
-    subject: "Computer Science",
-    rating: "5.0",
-    price: "2000",
-    location: "Lahore",
-    imageUrl: "https://i.pravatar.cc/150?img=30",
-  },
-    {
-    name: "Ayesha Malik",
-    subject: "Computer Science",
-    rating: "5.0",
-    price: "2000",
-    location: "Lahore",
-    imageUrl: "https://i.pravatar.cc/150?img=30",
-  },
- 
 ];
 
 export default tutors;
