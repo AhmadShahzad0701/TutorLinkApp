@@ -2,7 +2,8 @@ import { Feather } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
 import * as ImagePicker from 'expo-image-picker';
 import { useRouter } from 'expo-router';
-import { useState } from 'react';
+import React, { useState } from 'react';
+import { MaterialIcons } from '@expo/vector-icons';
 import {
   Alert,
   Image,
@@ -81,6 +82,11 @@ const EditProfile = () => {
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
+        {/* Back to Home Button */}
+        <TouchableOpacity style={styles.backButton} onPress={() => router.replace('/')}>
+          <MaterialIcons name="arrow-back" size={28} color="#4f46e5" />
+        </TouchableOpacity>
+
         <View style={styles.header} />
         <View style={styles.card}>
           <TouchableOpacity onPress={handleImagePick}>
@@ -164,6 +170,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#4f46e5',
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
+  },
+  backButton: {
+    position: 'absolute',
+    top: 10,
+    left: 10,
+    zIndex: 999,
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    padding: 4,
   },
   card: {
     backgroundColor: '#fff',

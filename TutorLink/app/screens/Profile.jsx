@@ -28,7 +28,7 @@ const Profile = () => {
   );
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
       {/* Back to Home Button */}
       <TouchableOpacity style={styles.backButton} onPress={() => router.replace('/')}>
         <MaterialIcons name="arrow-back" size={28} color="#4f46e5" />
@@ -71,42 +71,42 @@ const Profile = () => {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#f0f4f8',
+    backgroundColor: '#f9fafb',
     alignItems: 'center',
     paddingBottom: 40,
   },
   backButton: {
-    alignSelf: 'flex-start',
-    marginTop: 50,
-    marginLeft: 20,
+    position: 'absolute',
+    top: 10,
+    left: 10,
+    zIndex: 999,
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    padding: 4,
   },
   header: {
-    height: 140,
+    height: 120,
     width: '100%',
     backgroundColor: '#4f46e5',
-    borderBottomLeftRadius: 24,
-    borderBottomRightRadius: 24,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
   },
   card: {
     backgroundColor: '#fff',
-    marginTop: -80,
-    padding: 30,
-    borderRadius: 20,
-    width: '88%',
+    marginTop: -70,
+    padding: 25,
+    borderRadius: 16,
+    width: '90%',
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: 4 },
-    elevation: 10,
+    elevation: 5,
   },
   avatar: {
-    width: 130,
-    height: 130,
-    borderRadius: 65,
-    borderWidth: 4,
+    width: 120,
+    height: 120,
+    borderRadius: 100,
+    borderWidth: 3,
     borderColor: '#4f46e5',
-    marginBottom: 16,
+    marginBottom: 10,
   },
   name: {
     fontSize: 24,
@@ -151,22 +151,15 @@ const styles = StyleSheet.create({
   editButton: {
     flexDirection: 'row',
     backgroundColor: '#4f46e5',
-    paddingVertical: 12,
-    paddingHorizontal: 26,
-    borderRadius: 12,
+    paddingVertical: 14,
+    borderRadius: 10,
+    width: '100%',
+    justifyContent: 'center',
     marginTop: 30,
-    alignItems: 'center',
-    shadowColor: '#4f46e5',
-    shadowOpacity: 0.3,
-    shadowOffset: { width: 0, height: 5 },
-    shadowRadius: 10,
-    elevation: 6,
   },
   editText: {
     color: '#fff',
-    fontWeight: '600',
-    fontSize: 16,
-    marginLeft: 10,
+    marginLeft: 8,
   },
 });
 
