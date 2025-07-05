@@ -6,7 +6,7 @@ import tutors from '../../../data';
 
 const TutorListScreen = () => {
   const router = useRouter();
-  const { search, subject } = useLocalSearchParams();
+  const { search, subject, location } = useLocalSearchParams();
 
   const querySearch = search?.toLowerCase() || '';
   const querySubject = subject?.toLowerCase() || '';

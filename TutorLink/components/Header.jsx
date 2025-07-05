@@ -26,7 +26,7 @@ const Header = () => {
 
         <Text style={styles.heading}>Home</Text>
 
-        <TouchableOpacity onPress={() => router.push('screens/(hidden)/EditProfile')}>
+        <TouchableOpacity onPress={() => router.push('screens/(hidden)/Profile')}>
           <FontAwesome6 name="user-gear" size={20} color="white" />
         </TouchableOpacity>
       </View>
