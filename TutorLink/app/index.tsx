@@ -6,7 +6,6 @@ import HomeScreen from './screens/(hidden)/HomeScreen';
 const Index = () => {
   return (
     <View style={{ flex: 1 }}>
-
       <HomeScreen />
     </View>
   );

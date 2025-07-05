@@ -48,17 +48,7 @@ export default function Layout() {
         }}
       />
 
-      <Drawer.Screen
-        name="screens/(hidden)/Login"
-        options={{
-          title: 'Login',
-          drawerLabel: 'Login',
-          drawerIcon: ({ color, size }) => (
-            <FontAwesome name="sign-in" size={size} color={color} />
-          ),
-          headerShown: false,
-        }}
-      />
+      
 
       <Drawer.Screen
         name="screens/(hidden)/EditProfile"
@@ -83,11 +73,34 @@ export default function Layout() {
           header: () => <Header />,
         }}
       />
+      <Drawer.Screen
+        name="screens/(hidden)/Login"
+        options={{
+          title: 'Login',
+          drawerLabel: 'Login',
+          drawerIcon: ({ color, size }) => (
+            <FontAwesome name="sign-in" size={size} color={color} />
+          ),
+          headerShown: false,
+        }}
+      />
 
       <Drawer.Screen
         name="screens/(hidden)/SignUp"
-        options={{ drawerItemStyle: { display: 'none' }, headerShown: false }}
+        options={{
+          title: 'Logout',
+          drawerLabel: 'Logout',
+          drawerIcon: ({ color, size }) => (
+            <FontAwesome name="sign-out" size={size} color={color} />
+          ),
+          headerShown: false,
+        }}
       />
+
+      {/* <Drawer.Screen
+        name="screens/(hidden)/SignUp"
+        options={{ drawerItemStyle: { display: 'none' }, headerShown: false }}
+      /> */}
       <Drawer.Screen
         name="screens/(hidden)/TutorDataFetcherScreen"
         options={{ drawerItemStyle: { display: 'none' }, headerShown: false }}
@@ -100,6 +113,8 @@ export default function Layout() {
         name="screens/(hidden)/HomeScreen"
         options={{ drawerItemStyle: { display: 'none' }, headerShown: false }}
       />
+
+
     </Drawer>
   );
 }
