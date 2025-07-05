@@ -3,12 +3,11 @@ import { MaterialIcons } from '@expo/vector-icons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
-import { Image, StyleSheet, TextInput, TouchableOpacity, View } from 'react-native';
-
+import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 const Header = () => {
-  const navigation = useNavigation(); 
-  const router = useRouter();         
+  const navigation = useNavigation();
+  const router = useRouter();   
 
   return (
     <View style={styles.container}>
@@ -16,8 +15,8 @@ const Header = () => {
         <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
           <MaterialIcons name="menu" size={27} color="black" />
         </TouchableOpacity>
-
-        <Image source={require('../../assets/images/Logo.png')} style={styles.logo} />
+         <Text style={styles.heading}>Home</Text>
+        {/* <Image source={require('../../assets/images/Logo.png')} style={styles.logo} /> */}
 
         <TouchableOpacity onPress={() => router.push('/screens/Profile')}>
         <FontAwesome6 name="user-gear" size={20} color="black" />
@@ -38,6 +37,14 @@ const Header = () => {
 export default Header;
 
 const styles = StyleSheet.create({
+  heading: {
+    alignItems: 'center',
+    fontSize: 22,
+    color: 'black',
+    fontWeight: 'bold',
+    marginBottom: 20,
+    marginTop: 15,
+  },
   container: {
     backgroundColor: '#7C8BA5',
     paddingTop: 50,

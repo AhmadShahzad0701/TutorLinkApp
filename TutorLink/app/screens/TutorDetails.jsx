@@ -1,7 +1,6 @@
 import { useLocalSearchParams } from 'expo-router';
 import { Image, StyleSheet, Text, View } from 'react-native';
 
-
 export const options = {
   
   headerShown: false,
