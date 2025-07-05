@@ -3,23 +3,32 @@ import { MaterialIcons } from '@expo/vector-icons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { useState } from 'react';
+import { Keyboard, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 const Header = () => {
   const navigation = useNavigation();
-  const router = useRouter();   
+  const router = useRouter();
+  const [searchText, setSearchText] = useState('');
+
+  const handleSearch = () => {
+    if (searchText.trim() !== '') {
+      Keyboard.dismiss(); // hide keyboard
+      router.push({ pathname: '/screens/TutorListScreen', params: { search: searchText } });
+    }
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.topBar}>
         <TouchableOpacity onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
-          <MaterialIcons name="menu" size={27} color="black" />
+          <MaterialIcons name="menu" size={27} color="white" />
         </TouchableOpacity>
-         <Text style={styles.heading}>Home</Text>
-        {/* <Image source={require('../../assets/images/Logo.png')} style={styles.logo} /> */}
+
+        <Text style={styles.heading}>Home</Text>
 
         <TouchableOpacity onPress={() => router.push('/screens/Profile')}>
-        <FontAwesome6 name="user-gear" size={20} color="black" />
+          <FontAwesome6 name="user-gear" size={20} color="white" />
         </TouchableOpacity>
       </View>
 
@@ -28,6 +37,10 @@ const Header = () => {
           placeholder="Search tutor..."
           style={styles.input}
           placeholderTextColor="#999"
+          value={searchText}
+          onChangeText={setSearchText}
+          onSubmitEditing={handleSearch}
+          returnKeyType="search"
         />
       </View>
     </View>
@@ -40,7 +53,7 @@ const styles = StyleSheet.create({
   heading: {
     alignItems: 'center',
     fontSize: 22,
-    color: 'black',
+    color: 'white',
     fontWeight: 'bold',
     marginBottom: 20,
     marginTop: 15,
@@ -56,7 +69,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     shadowOffset: { width: 0, height: 2 },
     zIndex: 800,
-    borderRadius : 16,
+    borderRadius: 16,
   },
   topBar: {
     flexDirection: 'row',
@@ -80,7 +93,7 @@ const styles = StyleSheet.create({
   input: {
     marginLeft: 5,
     fontSize: 16,
-    flex : 1,
+    flex: 1,
     color: '#333',
   },
 });

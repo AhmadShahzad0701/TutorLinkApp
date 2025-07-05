@@ -1,9 +1,10 @@
-import { FontAwesome6, MaterialCommunityIcons, SimpleLineIcons } from '@expo/vector-icons';
+import { Feather, FontAwesome6, MaterialCommunityIcons, SimpleLineIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import TutorCard from '../components/TutorCard';
 import tutors from '../data';
+
 
 const HomeScreen = () => {
   const router = useRouter();
@@ -48,7 +49,7 @@ const HomeScreen = () => {
               })
             }
           >
-            <SimpleLineIcons name="chemistry" size={28} color="#7C8BA5" />
+            <SimpleLineIcons name="chemistry" size={33} color="#7C8BA5" />
             <Text style={styles.categoryText}>Chemistry</Text>
           </TouchableOpacity>
 
@@ -61,7 +62,7 @@ const HomeScreen = () => {
               })
             }
           >
-            <MaterialCommunityIcons name="math-compass" size={28} color="#7C8BA5" />
+            <MaterialCommunityIcons name="math-compass" size={33} color="#7C8BA5" />
             <Text style={styles.categoryText}>Math</Text>
           </TouchableOpacity>
 
@@ -74,24 +75,24 @@ const HomeScreen = () => {
               })
             }
           >
-            <FontAwesome6 name="dna" size={28} color="#7C8BA5" />
+            <FontAwesome6 name="dna" size={33} color="#7C8BA5" />
             <Text style={styles.categoryText}>Biology</Text>
           </TouchableOpacity>
         </View>
 
         <View style={styles.categoriesRow}>
           <TouchableOpacity
-            style={styles.categoryBox}
-            onPress={() =>
-              router.push({
-                pathname: '/screens/TutorListScreen',
-                params: { subject: 'Language' },
-              })
-            }
-          >
-            <FontAwesome6 name="language" size={28} color="#7C8BA5" />
-            <Text style={styles.categoryText}>Language</Text>
-          </TouchableOpacity>
+  style={styles.categoryBox}
+  onPress={() =>
+    router.push({
+      pathname: '/screens/TutorListScreen',
+      params: { search: '' }, // Empty search shows all tutors
+    })
+  }
+>
+  <Feather name="users" size={33} color="#7C8BA5" />
+  <Text style={styles.categoryText}>All Tutors</Text>
+</TouchableOpacity>
 
           <TouchableOpacity
             style={styles.categoryBox}
@@ -102,7 +103,7 @@ const HomeScreen = () => {
               })
             }
           >
-            <FontAwesome6 name="book-open-reader" size={28} color="#7C8BA5" />
+            <FontAwesome6 name="book-open-reader" size={33} color="#7C8BA5" />
             <Text style={styles.categoryText}>Philosophy</Text>
           </TouchableOpacity>
 
@@ -115,7 +116,7 @@ const HomeScreen = () => {
               })
             }
           >
-            <FontAwesome6 name="atom" size={28} color="#7C8BA5" />
+            <FontAwesome6 name="atom" size={33} color="#7C8BA5" />
             <Text style={styles.categoryText}>Physics</Text>
           </TouchableOpacity>
         </View>
@@ -171,13 +172,13 @@ const styles = StyleSheet.create({
   sectionTitleRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#B6BED0',
-    borderRadius: 10,
-    height: 35,
+    // backgroundColor: '#B6BED0',
+    // borderRadius: 10,
+    height: 20,
     paddingHorizontal: 12,
     gap: 8,
-    marginBottom: 10,
-    alignSelf: 'flex-start',
+    // marginBottom: 1,
+    // alignSelf: 'flex-start',
   },
   sectionTitle: {
     fontSize: 16,
@@ -195,7 +196,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
-    marginBottom: 20,
+    // marginBottom: 2,
     justifyContent: 'space-between',
   },
   tutorCardTextWrapper: {
@@ -216,14 +217,14 @@ const styles = StyleSheet.create({
   categoriesRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    gap: 12,
-    marginTop: 20,
+    gap: 10,
+    marginTop: 15,
   },
   categoryBox: {
     alignItems: 'center',
     justifyContent: 'center',
-    width: 100,
-    height: 100,
+    width: 110,
+    height: 110,
     backgroundColor: '#F2F2F2',
     borderRadius: 16,
     shadowColor: '#000',
@@ -234,7 +235,7 @@ const styles = StyleSheet.create({
   },
   categoryText: {
     marginTop: 6,
-    fontSize: 12,
+    fontSize: 13,
     fontWeight: '500',
     color: '#333',
     textAlign: 'center',

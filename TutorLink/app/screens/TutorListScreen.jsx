@@ -1,19 +1,22 @@
-// app/screens/TutorListScreen.js
-import { Feather, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
-import { useLocalSearchParams } from 'expo-router';
-import { FlatList, StyleSheet, Text, View } from 'react-native';
+import { Feather, FontAwesome5, MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import TutorCard from '../components/TutorCard';
 import tutors from '../data';
 
 const TutorListScreen = () => {
-  const { subject } = useLocalSearchParams();
+  const router = useRouter();
+  const { search } = useLocalSearchParams();
+  const query = search?.toLowerCase() || '';
 
   const filteredTutors = tutors.filter(
-    (tutor) => tutor.subject.toLowerCase() === subject.toLowerCase()
+    (tutor) =>
+      tutor.subject.toLowerCase().includes(query) ||
+      tutor.location.toLowerCase().includes(query)
   );
 
-  const getSubjectIcon = (subject) => {
-    const lower = subject.toLowerCase();
+  const getSubjectIcon = (text) => {
+    const lower = text.toLowerCase();
     if (lower.includes('chemistry')) return <MaterialCommunityIcons name="flask" size={28} color="#7C8BA5" />;
     if (lower.includes('math')) return <Feather name="activity" size={28} color="#7C8BA5" />;
     if (lower.includes('biology')) return <FontAwesome5 name="dna" size={28} color="#7C8BA5" />;
@@ -24,23 +27,34 @@ const TutorListScreen = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <View style={styles.iconContainer}>
-          {getSubjectIcon(subject)}
-        </View>
-        <View style={styles.textContainer}>
-          <Text style={styles.title}>{filteredTutors.length}+ Tutors</Text>
-          <Text style={styles.subTitle}>for {subject}</Text>
-        </View>
-      </View>
+      {/* Back Button */}
+      <TouchableOpacity style={styles.backButton} onPress={() => router.replace('/')}>
+        <MaterialIcons name="arrow-back" size={28} color="#4f46e5" />
+      </TouchableOpacity>
 
-      <FlatList
-        data={filteredTutors}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => <TutorCard tutor={item} />}
-        contentContainerStyle={{ paddingBottom: 40 }}
-        showsVerticalScrollIndicator={false}
-      />
+      {/* Header Bar */}
+      <View style={styles.header} />
+
+      {/* Card-style Info Section */}
+      <View style={styles.card}>
+        <View style={styles.headerRow}>
+          <View style={styles.iconBox}>{getSubjectIcon(query)}</View>
+          <View>
+            <Text style={styles.title}>{filteredTutors.length}+ Tutors</Text>
+            <Text style={styles.subtitle}>matching "{search}"</Text>
+          </View>
+        </View>
+
+        {/* Tutor List */}
+        <FlatList
+          data={filteredTutors}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item }) => <TutorCard tutor={item} />}
+          contentContainerStyle={{ paddingBottom: 40 }}
+          showsVerticalScrollIndicator={false}
+          ListEmptyComponent={<Text style={{ textAlign: 'center', marginTop: 20 }}>No tutors found.</Text>}
+        />
+      </View>
     </View>
   );
 };
@@ -50,38 +64,53 @@ export default TutorListScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
-    padding: 20,
+    backgroundColor: '#f9fafb',
+    alignItems: 'center',
+  },
+  backButton: {
+    position: 'absolute',
+    top: 10,
+    left: 10,
+    zIndex: 999,
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    padding: 4,
   },
   header: {
+    height: 120,
+    width: '100%',
+    backgroundColor: '#4f46e5',
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+  },
+  card: {
+    backgroundColor: '#fff',
+    marginTop: -70,
+    padding: 20,
+    borderRadius: 16,
+    width: '90%',
+    elevation: 5,
+    flex: 1,
+  },
+  headerRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 24,
-    backgroundColor: '#7C8BA5',
-    padding: 16,
-    borderRadius: 25,
-    shadowColor: '#000',
-    shadowOpacity: 0.05,
-    shadowOffset: { width: 0, height: 3 },
-    shadowRadius: 4,
-    elevation: 2,
+    marginBottom: 20,
   },
-  iconContainer: {
-    backgroundColor: 'white',
-    borderRadius: 12,
+  iconBox: {
+    backgroundColor: '#E4E8EF',
     padding: 12,
-    marginRight: 16,
-  },
-  textContainer: {
-    flexDirection: 'column',
+    borderRadius: 10,
+    marginRight: 15,
   },
   title: {
     fontSize: 20,
-    fontWeight: '700',
-    color: 'white',
+    fontWeight: 'bold',
+    color: '#333',
   },
-  subTitle: {
-    fontSize: 14,
-    color: 'white',
+  subtitle: {
+    fontSize: 16,
+    color: '#666',
+    marginTop: 4,
   },
 });
