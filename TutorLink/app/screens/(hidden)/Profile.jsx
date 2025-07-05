@@ -28,23 +28,25 @@ const Profile = () => {
   );
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      
-      {/* Back to Home Button */}
+    <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
+      {/* Back Button */}
       <TouchableOpacity style={styles.backButton} onPress={() => router.replace('/')}>
-        <MaterialIcons name="arrow-back" size={28} color="#4f46e5" />
+        <MaterialIcons name="arrow-back" size={28} color="#007acc" />
       </TouchableOpacity>
 
-      {/* Header Section */}
-      <View style={styles.header} />
+      {/* Header */}
+      <View style={styles.headerContainer}>
 
-      {/* Tutor Profile Card */}
+        <Text style={styles.heading}>Tutor Profile</Text>
+      </View>
+
+      {/* Profile Card */}
       <View style={styles.card}>
         <Image
           source={
             decodedImage
               ? { uri: decodedImage }
-              : require('../../assets/images/placeholder.jpeg')
+              : require('../../../assets/images/placeholder.jpeg')
           }
           style={styles.avatar}
         />
@@ -63,10 +65,7 @@ const Profile = () => {
           <InfoRow icon="map-pin" label="Location" value={location} color="#3B82F6" />
         </View>
 
-        {/* Edit Button */}
-        <TouchableOpacity
-          style={styles.editButton}
-          onPress={() => router.push('/screens/EditProfile')}>
+        <TouchableOpacity style={styles.editButton} onPress={() => router.push('/screens/(hidden)/EditProfile')}>
           <Feather name="edit" size={18} color="#fff" />
           <Text style={styles.editText}>Edit Profile</Text>
         </TouchableOpacity>
@@ -79,42 +78,55 @@ export default Profile;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#f0f4f8',
+    backgroundColor: '#f9fafb',
     alignItems: 'center',
-    paddingBottom: 40,
+    paddingBottom: 50,
   },
   backButton: {
-    alignSelf: 'flex-start',
-    marginTop: 50,
-    marginLeft: 20,
+    position: 'absolute',
+    top: 25,
+    left: 10,
+    zIndex: 1000,
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    padding: 5,
+    marginTop: 20,
   },
-  header: {
-    height: 140,
+
+  // Header Styling
+  headerContainer: {
+    backgroundColor: '#007acc',
+    paddingTop: 80,
+    paddingBottom: 35,
+    paddingHorizontal: 15,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    alignItems: 'center',
     width: '100%',
-    backgroundColor: '#4f46e5',
-    borderBottomLeftRadius: 24,
-    borderBottomRightRadius: 24,
   },
+  heading: {
+    fontSize: 22,
+    color: 'white',
+    fontWeight: 'bold',
+  },
+
+  // Profile Card
   card: {
     backgroundColor: '#fff',
-    marginTop: -80,
-    padding: 30,
-    borderRadius: 20,
-    width: '88%',
+    marginTop: -20,
+    padding: 25,
+    borderRadius: 16,
+    width: '90%',
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: 4 },
-    elevation: 10,
+    elevation: 5,
   },
   avatar: {
-    width: 130,
-    height: 130,
-    borderRadius: 65,
-    borderWidth: 4,
-    borderColor: '#4f46e5',
-    marginBottom: 16,
+    width: 120,
+    height: 120,
+    borderRadius: 100,
+    borderWidth: 3,
+    borderColor: '#007acc',
+    marginBottom: 10,
   },
   name: {
     fontSize: 24,
@@ -158,22 +170,15 @@ const styles = StyleSheet.create({
   },
   editButton: {
     flexDirection: 'row',
-    backgroundColor: '#4f46e5',
-    paddingVertical: 12,
-    paddingHorizontal: 26,
-    borderRadius: 12,
+    backgroundColor: '#007acc',
+    paddingVertical: 14,
+    borderRadius: 10,
+    width: '100%',
+    justifyContent: 'center',
     marginTop: 30,
-    alignItems: 'center',
-    shadowColor: '#4f46e5',
-    shadowOpacity: 0.3,
-    shadowOffset: { width: 0, height: 5 },
-    shadowRadius: 10,
-    elevation: 6,
   },
   editText: {
     color: '#fff',
-    fontWeight: '600',
-    fontSize: 16,
-    marginLeft: 10,
+    marginLeft: 8,
   },
 });

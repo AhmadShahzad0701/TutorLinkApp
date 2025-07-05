@@ -1,9 +1,8 @@
-import { Feather } from '@expo/vector-icons';
+import { Feather, MaterialIcons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
 import * as ImagePicker from 'expo-image-picker';
 import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
-import { MaterialIcons } from '@expo/vector-icons';
+import { useState } from 'react';
 import {
   Alert,
   Image,
@@ -57,7 +56,7 @@ const EditProfile = () => {
     const encodedImage = profileImage ? encodeURIComponent(profileImage) : '';
 
     router.replace({
-      pathname: '/screens/Profile',
+      pathname: '/screens/(hidden)/Profile',
       params: {
         name,
         email,
@@ -78,23 +77,28 @@ const EditProfile = () => {
       keyboardVerticalOffset={80}
     >
       <ScrollView
-        contentContainerStyle={styles.scrollContent}
+        contentContainerStyle={styles.container}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        {/* Back to Home Button */}
+        {/* Back Button */}
         <TouchableOpacity style={styles.backButton} onPress={() => router.replace('/')}>
-          <MaterialIcons name="arrow-back" size={28} color="#4f46e5" />
+          <MaterialIcons name="arrow-back" size={28} color="#007acc" />
         </TouchableOpacity>
 
-        <View style={styles.header} />
+        {/* Header */}
+        <View style={styles.headerContainer}>
+          <Text style={styles.heading}>Edit Profile</Text>
+        </View>
+
+        {/* Form Card */}
         <View style={styles.card}>
           <TouchableOpacity onPress={handleImagePick}>
             <Image
               source={
                 profileImage
                   ? { uri: profileImage }
-                  : require('../../assets/images/placeholder.jpeg')
+                  : require('../../../assets/images/placeholder.jpeg')
               }
               style={styles.avatar}
             />
@@ -162,27 +166,46 @@ const EditProfile = () => {
   );
 };
 
+export default EditProfile;
+
 const styles = StyleSheet.create({
-  scrollContent: { alignItems: 'center', paddingBottom: 40, backgroundColor: '#f9fafb' },
-  header: {
-    height: 120,
-    width: '100%',
-    backgroundColor: '#4f46e5',
-    borderBottomLeftRadius: 20,
-    borderBottomRightRadius: 20,
+  container: {
+    backgroundColor: '#f9fafb',
+    alignItems: 'center',
+    paddingBottom: 15,
   },
   backButton: {
     position: 'absolute',
-    top: 10,
+    top: 25,
     left: 10,
-    zIndex: 999,
+    zIndex: 1000,
     backgroundColor: '#fff',
     borderRadius: 20,
-    padding: 4,
+    padding: 5,
+    marginTop: 20,
   },
+
+  // Header Styling
+  headerContainer: {
+    backgroundColor: '#007acc',
+    paddingTop: 80,
+    paddingBottom: 35,
+    paddingHorizontal: 15,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    alignItems: 'center',
+    width: '100%',
+  },
+  heading: {
+    fontSize: 22,
+    color: 'white',
+    fontWeight: 'bold',
+  },
+
+  // Card Styling
   card: {
     backgroundColor: '#fff',
-    marginTop: -70,
+    marginTop: -20,
     padding: 25,
     borderRadius: 16,
     width: '90%',
@@ -194,11 +217,11 @@ const styles = StyleSheet.create({
     height: 120,
     borderRadius: 100,
     borderWidth: 3,
-    borderColor: '#4f46e5',
+    borderColor: '#007acc',
     marginBottom: 10,
   },
   changeText: {
-    color: '#4f46e5',
+    color: '#007acc',
     marginBottom: 20,
   },
   input: {
@@ -207,6 +230,8 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 10,
     marginBottom: 15,
+    fontSize: 16,
+    color: '#111827',
   },
   descriptionInput: {
     width: '100%',
@@ -216,16 +241,9 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     height: 120,
     textAlignVertical: 'top',
+    fontSize: 16,
+    color: '#111827',
   },
-  saveButton: {
-    flexDirection: 'row',
-    backgroundColor: '#4f46e5',
-    paddingVertical: 14,
-    borderRadius: 10,
-    width: '100%',
-    justifyContent: 'center',
-  },
-  saveText: { color: '#fff', marginLeft: 8 },
   pickerWrapper: {
     width: '100%',
     backgroundColor: '#f3f4f6',
@@ -247,12 +265,25 @@ const styles = StyleSheet.create({
     height: 55,
     width: '100%',
   },
-  inputIcon: { marginRight: 10 },
+  inputIcon: {
+    marginRight: 10,
+  },
   inputWithIconText: {
     flex: 1,
     fontSize: 16,
     color: '#111827',
   },
+  saveButton: {
+    flexDirection: 'row',
+    backgroundColor: '#007acc',
+    paddingVertical: 14,
+    borderRadius: 10,
+    width: '100%',
+    justifyContent: 'center',
+  },
+  saveText: {
+    color: '#fff',
+    marginLeft: 8,
+    fontWeight: '600',
+  },
 });
-
-export default EditProfile;

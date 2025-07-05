@@ -2,7 +2,7 @@ import { Feather, MaterialIcons } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { Alert, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import tutors from '../data';
+import tutors from '../../../data';
 
 const TutorDataFetcherScreen = () => {
   const router = useRouter();
@@ -14,7 +14,7 @@ const TutorDataFetcherScreen = () => {
     return (
       <View style={styles.errorContainer}>
         <Text style={styles.errorText}>Tutor not found.</Text>
-        <TouchableOpacity onPress={() => router.push('/screens/TutorListScreen')}>
+        <TouchableOpacity onPress={() => router.push('/screens/(hidden)/TutorListScreen')}>
           <Text style={styles.backLink}>Go Back</Text>
         </TouchableOpacity>
       </View>
@@ -28,14 +28,14 @@ const TutorDataFetcherScreen = () => {
 
   const InfoRow = ({ icon, label, value, color, isCopyable }) => (
     <View style={styles.infoRow}>
-      <Feather name={icon} size={20} color={color} style={styles.icon} />
+      <Feather name={icon} size={18} color={color} style={styles.icon} />
       <View style={styles.infoBlock}>
         <Text style={styles.label}>{label}</Text>
         <View style={styles.copyRow}>
           <Text style={styles.info}>{value}</Text>
           {isCopyable && (
             <TouchableOpacity onPress={() => copyToClipboard(value)} style={styles.copyIcon}>
-              <Feather name="copy" size={20} color="#4f46e5" />
+              <Feather name="copy" size={18} color="#4f46e5" />
             </TouchableOpacity>
           )}
         </View>
@@ -44,13 +44,16 @@ const TutorDataFetcherScreen = () => {
   );
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
+      {/* Back Button */}
       <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-        <MaterialIcons name="arrow-back" size={28} color="#4f46e5" />
+        <MaterialIcons name="arrow-back" size={28} color="#007acc" />
       </TouchableOpacity>
 
-      <View style={styles.header} />
+      {/* Header */}
+      <View style={styles.headerContainer} />
 
+      {/* Profile Card */}
       <View style={styles.card}>
         <View style={styles.avatarContainer}>
           <Image source={{ uri: tutor.imageUrl }} style={styles.avatar} />
@@ -78,54 +81,34 @@ const TutorDataFetcherScreen = () => {
 export default TutorDataFetcherScreen;
 
 const styles = StyleSheet.create({
-
-  header: {
-    height: 140,
-    width: '100%',
-    backgroundColor: '#4f46e5',
-    borderBottomLeftRadius: 40,
-    borderBottomRightRadius: 40,
-  },
-
-  avatarContainer: {
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-    marginTop: -80,
-    borderWidth: 4,
-    borderColor: '#fff',
-    backgroundColor: '#fff',
-    shadowColor: '#000',
-    shadowOpacity: 0.2,
-    shadowOffset: { width: 0, height: 4 },
-    shadowRadius: 8,
-    elevation: 6,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  avatar: {
-    width: 110,
-    height: 110,
-    borderRadius: 55,
-  },
   container: {
     backgroundColor: '#f9fafb',
     alignItems: 'center',
-    paddingBottom: 40,
+    paddingBottom: 50,
   },
   backButton: {
     position: 'absolute',
-    top: 10,
+    top: 30,
     left: 10,
-    zIndex: 999,
+    zIndex: 1000,
     backgroundColor: '#fff',
     borderRadius: 20,
-    padding: 4,
+    padding: 5,
+    marginTop: 20,
+  },
+  headerContainer: {
+    backgroundColor: '#007acc', 
+    paddingTop: 80,
+    paddingBottom: 45,
+    paddingHorizontal: 15,
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    alignItems: 'center',
+    width: '100%',
   },
   card: {
     backgroundColor: '#fff',
-    marginTop: -30,
+    marginTop: -20, 
     padding: 25,
     borderRadius: 16,
     width: '90%',
@@ -135,6 +118,22 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 3 },
     shadowRadius: 5,
+  },
+  avatarContainer: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    borderWidth: 3,
+    borderColor: '#007acc',
+    backgroundColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  avatar: {
+    width: 110,
+    height: 110,
+    borderRadius: 55,
   },
   name: {
     fontSize: 24,

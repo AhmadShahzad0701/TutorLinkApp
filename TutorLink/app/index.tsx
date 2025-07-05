@@ -1,7 +1,7 @@
 // app/index.jsx
 import React from 'react';
 import { View } from 'react-native';
-import HomeScreen from './screens/HomeScreen';
+import HomeScreen from './screens/(hidden)/HomeScreen';
 
 const Index = () => {
   return (

@@ -1,5 +1,6 @@
-import { useNavigation } from '@react-navigation/native';
+import { MaterialIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+
 import { useState } from 'react';
 import {
   Alert,
@@ -8,62 +9,46 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity,
-  View, // ✅ Added for layout
+  TouchableOpacity
 } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons'; // ✅ For back icon
 
-const SignUp = () => {
-  const navigation = useNavigation();
+const Login = () => {
   const router = useRouter();
 
-  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
 
-  const handleSignUp = () => {
-    if (!name || !email || !password || !confirmPassword) {
-      Alert.alert('Error', 'All fields are required.');
-      return;
-    }
-    if (password !== confirmPassword) {
-      Alert.alert('Error', 'Passwords do not match.');
+  const handleLogin = () => {
+    if (!email || !password) {
+      Alert.alert('Error', 'Please enter both email and password.');
       return;
     }
 
-    console.log('User signed up:', { name, email });
+    console.log('User logged in:', { email });
 
-    navigation.navigate('Home');
+    router.replace('/');
   };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {/* ✅ Back Icon */}
       <TouchableOpacity
         style={styles.backButton}
         onPress={() => router.replace('/')}
       >
-        <MaterialIcons name="arrow-back" size={28} color="#4f46e5" />
+        <MaterialIcons name="arrow-back" size={28} color="#007acc" />
       </TouchableOpacity>
-
       <Image
-        source={require('../../assets/images/Logo.png')}
+        source={require('../../../assets/images/Logo.png')}
         style={styles.logo}
       />
-      <Text style={styles.heading}>Create Your Account</Text>
+      <Text style={styles.heading}>Welcome Back</Text>
 
-      <TextInput
-        placeholder="Full Name"
-        value={name}
-        onChangeText={setName}
-        style={styles.input}
-      />
       <TextInput
         placeholder="Email"
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
+        autoCapitalize="none"
         style={styles.input}
       />
       <TextInput
@@ -73,48 +58,41 @@ const SignUp = () => {
         secureTextEntry
         style={styles.input}
       />
-      <TextInput
-        placeholder="Confirm Password"
-        value={confirmPassword}
-        onChangeText={setConfirmPassword}
-        secureTextEntry
-        style={styles.input}
-      />
 
-      <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-        <Text style={styles.buttonText}>Sign Up</Text>
+      <TouchableOpacity style={styles.button} onPress={handleLogin}>
+        <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
 
       <Text style={styles.footerText}>
-        Already have an account?{' '}
+        Don’t have an account?{' '}
         <Text
           style={styles.link}
-          onPress={() => router.push('/screens/Login')}>
-          Log in
+          onPress={() => router.push('/screens/(hidden)/SignUp')}
+        >
+          Sign Up
         </Text>
       </Text>
     </ScrollView>
   );
 };
 
+export default Login;
+
 const styles = StyleSheet.create({
   container: {
+    flexGrow: 1,
+    backgroundColor: '#f9fafb',
+    justifyContent: 'center',
+    alignItems: 'center',
     paddingVertical: 50,
     paddingHorizontal: 25,
-    backgroundColor: '#f9fafb',
-    alignItems: 'center',
-    flexGrow: 1,
-  },
-  backButton: {
-    position: 'absolute',
-    top: 50,
-    left: 20,
-    zIndex: 10,
   },
   logo: {
-    width: 150,
-    height: 150,
-    borderRadius: 100,
+    width: 120,
+    height: 120,
+    resizeMode: 'contain',
+    marginBottom: 20,
+    borderRadius : 70,
   },
   heading: {
     fontSize: 24,
@@ -135,7 +113,7 @@ const styles = StyleSheet.create({
   },
   button: {
     width: '100%',
-    backgroundColor: '#4f46e5',
+    backgroundColor: '#007acc',
     paddingVertical: 14,
     borderRadius: 12,
     marginTop: 10,
@@ -157,9 +135,13 @@ const styles = StyleSheet.create({
     color: '#6b7280',
   },
   link: {
-    color: '#4f46e5',
+    color: '#007acc',
     fontWeight: '600',
   },
+    backButton: {
+    position: 'absolute',
+    top: 50,
+    left: 20,
+    zIndex: 10,
+    }
 });
-
-export default SignUp;

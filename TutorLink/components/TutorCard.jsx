@@ -16,7 +16,7 @@ const TutorCard = ({ tutor }) => {
 
   const handleImagePress = () => {
     router.push({
-      pathname: '/screens/TutorDataFetcherScreen',
+      pathname: 'screens/(hidden)/TutorDataFetcherScreen',
       params: { tutorName: tutor.name },
     });
   };
@@ -26,12 +26,9 @@ const TutorCard = ({ tutor }) => {
     Alert.alert('Thank you!', `You rated ${star} star${star > 1 ? 's' : ''}`);
   };
 
-
-
   return (
     <View style={styles.cardOuter}>
       <View style={styles.cardInner}>
-
         <TouchableOpacity onPress={handleImagePress} activeOpacity={0.85}>
           <View style={styles.imageHalf}>
             <Image source={{ uri: tutor.imageUrl }} style={styles.avatar} />
@@ -40,16 +37,28 @@ const TutorCard = ({ tutor }) => {
 
         <View style={styles.infoHalf}>
           <Text style={styles.name}>{tutor.name}</Text>
-          <Text style={styles.role}>{tutor.subject}</Text>
-          <Text style={styles.detail}>{tutor.location}</Text>
-          <Text style={styles.price}>Rs {tutor.price}/hr</Text>
+
+          <View style={styles.infoRow}>
+            <Text style={styles.label}>Subject:</Text>
+            <Text style={styles.value}>{tutor.subject}</Text>
+          </View>
+
+          <View style={styles.infoRow}>
+            <Text style={styles.label}>Location:</Text>
+            <Text style={styles.value}>{tutor.location}</Text>
+          </View>
+
+          <View style={styles.infoRow}>
+            <Text style={styles.label}>Fee:</Text>
+            <Text style={styles.price}>Rs {tutor.price} / hour</Text>
+          </View>
 
           <View style={styles.ratingRow}>
             {[1, 2, 3, 4, 5].map((star) => (
               <TouchableOpacity key={star} onPress={() => handleStarPress(star)}>
                 <Feather
                   name="star"
-                  size={22}
+                  size={24}
                   color={star <= selectedRating ? '#FACC15' : '#D1D5DB'}
                   style={styles.starIcon}
                 />
@@ -76,6 +85,7 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
     marginBottom: 20,
     elevation: 3,
+    marginTop: 20,
   },
   cardInner: {
     borderRadius: 16,
@@ -86,7 +96,7 @@ const styles = StyleSheet.create({
   },
   imageHalf: {
     width: '100%',
-    height: 150,
+    height: 160,
     backgroundColor: '#e0e7ff',
     justifyContent: 'center',
     alignItems: 'center',
@@ -99,37 +109,41 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 16,
   },
   infoHalf: {
-    padding: 14,
+    padding: 16,
     backgroundColor: '#ffffff',
   },
   name: {
-    fontSize: 20,
-    fontWeight: '1200',
+    fontSize: 22,
+    fontWeight: '800',
     color: '#1f2937',
-    marginBottom: 4,
+    marginBottom: 12,
+    letterSpacing: 0.5,
   },
-  role: {
-    fontSize: 17,
-    color: '#4b5563',
-    marginBottom: 4,
+  infoRow: {
+    flexDirection: 'row',
+    marginBottom: 6,
   },
-  detail: {
-    fontSize: 18,
-    color: '#9ca3af',
-    marginBottom: 2,
+  label: {
+    fontSize: 14,
+    color: '#6b7280',
+    width: 80,
+  },
+  value: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#1f2937',
   },
   price: {
-    fontSize: 18,
-    color: '#10b981',
-    fontWeight: '600',
-    marginBottom: 6,
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: '#059669',
   },
   ratingRow: {
     flexDirection: 'row',
-    marginTop: 8,
     alignItems: 'center',
+    marginTop: 10,
   },
   starIcon: {
-    marginHorizontal: 6,
+    marginHorizontal: 4,
   },
 });

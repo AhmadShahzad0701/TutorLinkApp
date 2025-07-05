@@ -1,10 +1,8 @@
 import { Feather, FontAwesome6, MaterialCommunityIcons, SimpleLineIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import React from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import TutorCard from '../components/TutorCard';
-import tutors from '../data';
-
+import TutorCard from '../../../components/TutorCard';
+import tutors from '../../../data';
 
 const HomeScreen = () => {
   const router = useRouter();
@@ -20,7 +18,7 @@ const HomeScreen = () => {
 
       <TouchableOpacity
         style={styles.tutorCard}
-        onPress={() => router.push('/screens/EditProfile')}
+        onPress={() => router.push('/screens/(hidden)/EditProfile')}
       >
         <FontAwesome6 name="user-plus" size={22} color="black" />
         <View style={styles.tutorCardTextWrapper}>
@@ -32,97 +30,76 @@ const HomeScreen = () => {
         <FontAwesome6 name="chevron-right" size={18} color="#6b7280" />
       </TouchableOpacity>
 
-      {/* Categories Section */}
       <View style={styles.section}>
         <View style={styles.sectionTitleRow}>
           <MaterialCommunityIcons name="apps" size={20} color="#333" />
           <Text style={styles.sectionTitle}>Categories</Text>
         </View>
 
-        <View style={styles.categoriesRow}>
+        <View style={styles.categoriesGrid}>
           <TouchableOpacity
             style={styles.categoryBox}
             onPress={() =>
-              router.push({
-                pathname: '/screens/TutorListScreen',
-                params: { subject: 'Chemistry' },
-              })
+              router.push({ pathname: '/screens/(hidden)/TutorListScreen', params: { search: '' } })
             }
           >
-            <SimpleLineIcons name="chemistry" size={33} color="#7C8BA5" />
+            <Feather name="users" size={33} color="#007acc" />
+            <Text style={styles.categoryText}>All Tutors</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.categoryBox}
+            onPress={() =>
+              router.push({ pathname: '/screens/(hidden)/TutorListScreen', params: { subject: 'Chemistry' } })
+            }
+          >
+            <SimpleLineIcons name="chemistry" size={33} color="#007acc" />
             <Text style={styles.categoryText}>Chemistry</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.categoryBox}
             onPress={() =>
-              router.push({
-                pathname: '/screens/TutorListScreen',
-                params: { subject: 'Math' },
-              })
+              router.push({ pathname: '/screens/(hidden)/TutorListScreen', params: { subject: 'Math' } })
             }
           >
-            <MaterialCommunityIcons name="math-compass" size={33} color="#7C8BA5" />
+            <MaterialCommunityIcons name="math-compass" size={33} color="#007acc" />
             <Text style={styles.categoryText}>Math</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.categoryBox}
             onPress={() =>
-              router.push({
-                pathname: '/screens/TutorListScreen',
-                params: { subject: 'Biology' },
-              })
+              router.push({ pathname: '/screens/(hidden)/TutorListScreen', params: { subject: 'Biology' } })
             }
           >
-            <FontAwesome6 name="dna" size={33} color="#7C8BA5" />
+            <FontAwesome6 name="dna" size={33} color="#007acc" />
             <Text style={styles.categoryText}>Biology</Text>
           </TouchableOpacity>
-        </View>
-
-        <View style={styles.categoriesRow}>
-          <TouchableOpacity
-  style={styles.categoryBox}
-  onPress={() =>
-    router.push({
-      pathname: '/screens/TutorListScreen',
-      params: { search: '' }, // Empty search shows all tutors
-    })
-  }
->
-  <Feather name="users" size={33} color="#7C8BA5" />
-  <Text style={styles.categoryText}>All Tutors</Text>
-</TouchableOpacity>
 
           <TouchableOpacity
             style={styles.categoryBox}
             onPress={() =>
-              router.push({
-                pathname: '/screens/TutorListScreen',
-                params: { subject: 'Philosophy' },
-              })
+              router.push({ pathname: '/screens/(hidden)/TutorListScreen', params: { subject: 'Philosophy' } })
             }
           >
-            <FontAwesome6 name="book-open-reader" size={33} color="#7C8BA5" />
+            <FontAwesome6 name="book-open-reader" size={33} color="#007acc" />
             <Text style={styles.categoryText}>Philosophy</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.categoryBox}
             onPress={() =>
-              router.push({
-                pathname: '/screens/TutorListScreen',
-                params: { subject: 'Physics' },
-              })
+              router.push({ pathname: '/screens/(hidden)/TutorListScreen', params: { subject: 'Physics' } })
             }
           >
-            <FontAwesome6 name="atom" size={33} color="#7C8BA5" />
+            <FontAwesome6 name="atom" size={33} color="#007acc" />
             <Text style={styles.categoryText}>Physics</Text>
           </TouchableOpacity>
         </View>
       </View>
 
-      {/* Recommended Teachers Section */}
+      {/* Recommended Tutors */}
       <View style={styles.section}>
         <View style={styles.sectionTitleRow}>
           <FontAwesome6 name="user-graduate" size={20} color="#333" />
@@ -172,13 +149,9 @@ const styles = StyleSheet.create({
   sectionTitleRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    // backgroundColor: '#B6BED0',
-    // borderRadius: 10,
     height: 20,
     paddingHorizontal: 12,
     gap: 8,
-    // marginBottom: 1,
-    // alignSelf: 'flex-start',
   },
   sectionTitle: {
     fontSize: 16,
@@ -196,7 +169,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
-    // marginBottom: 2,
     justifyContent: 'space-between',
   },
   tutorCardTextWrapper: {
@@ -214,17 +186,19 @@ const styles = StyleSheet.create({
     color: '#6B7280',
     marginTop: 4,
   },
-  categoriesRow: {
+  categoriesGrid: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     justifyContent: 'space-between',
-    gap: 10,
-    marginTop: 15,
+    marginTop: 10,
   },
   categoryBox: {
     alignItems: 'center',
     justifyContent: 'center',
-    width: 110,
-    height: 110,
+    width: '30%', 
+    height : '60%',
+    aspectRatio : 1,
+    marginBottom: 15,
     backgroundColor: '#F2F2F2',
     borderRadius: 16,
     shadowColor: '#000',
@@ -239,9 +213,10 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: '#333',
     textAlign: 'center',
+    padding : 1,
   },
   horizontalCardWrapper: {
     width: 280,
-    marginRight: 16,
+    marginRight: 11,
   },
 });

@@ -1,4 +1,3 @@
-// components/Header.jsx
 import { MaterialIcons } from '@expo/vector-icons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
@@ -13,8 +12,8 @@ const Header = () => {
 
   const handleSearch = () => {
     if (searchText.trim() !== '') {
-      Keyboard.dismiss(); // hide keyboard
-      router.push({ pathname: '/screens/TutorListScreen', params: { search: searchText } });
+      Keyboard.dismiss();
+      router.push({ pathname: 'screens/(hidden)/TutorListScreen', params: { search: searchText } });
     }
   };
 
@@ -27,7 +26,7 @@ const Header = () => {
 
         <Text style={styles.heading}>Home</Text>
 
-        <TouchableOpacity onPress={() => router.push('/screens/Profile')}>
+        <TouchableOpacity onPress={() => router.push('screens/(hidden)/EditProfile')}>
           <FontAwesome6 name="user-gear" size={20} color="white" />
         </TouchableOpacity>
       </View>
@@ -59,7 +58,7 @@ const styles = StyleSheet.create({
     marginTop: 15,
   },
   container: {
-    backgroundColor: '#7C8BA5',
+    backgroundColor: '#007acc',
     paddingTop: 50,
     paddingBottom: 17,
     paddingHorizontal: 15,
