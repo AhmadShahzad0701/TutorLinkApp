@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "TutorLink",
+    "name": "",
     "slug": "TutorLink",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/Logo.png",
     "scheme": "tutorlink",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -36,10 +36,7 @@
       "typedRoutes": true
     },
     "extra": {
-      "router": {},
-      "eas": {
-        "projectId": "41667314-77e0-4b32-a591-13a9d72bc57c"
-      }
+      "router": {}
     }
   }
 }

@@ -13,7 +13,13 @@ const Header = () => {
   const handleSearch = () => {
     if (searchText.trim() !== '') {
       Keyboard.dismiss();
-      router.push({ pathname: 'screens/(hidden)/TutorListScreen', params: { search: searchText } });
+      router.push({
+        pathname: 'screens/(hidden)/TutorListScreen',
+        params: { search: searchText },
+      });
+
+      // ✅ Clear the input after search
+      setSearchText('');
     }
   };
 

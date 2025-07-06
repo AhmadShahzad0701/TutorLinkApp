@@ -81,17 +81,15 @@ const EditProfile = () => {
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        {/* Back Button */}
+
         <TouchableOpacity style={styles.backButton} onPress={() => router.replace('/')}>
           <MaterialIcons name="arrow-back" size={28} color="#007acc" />
         </TouchableOpacity>
 
-        {/* Header */}
         <View style={styles.headerContainer}>
           <Text style={styles.heading}>Edit Profile</Text>
         </View>
 
-        {/* Form Card */}
         <View style={styles.card}>
           <TouchableOpacity onPress={handleImagePick}>
             <Image

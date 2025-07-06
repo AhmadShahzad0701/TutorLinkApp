@@ -1,10 +1,10 @@
-import { FontAwesome } from '@expo/vector-icons'; // Icon package
+import { FontAwesome } from '@expo/vector-icons';
 import { Drawer } from 'expo-router/drawer';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import Header from '../components/Header';
 
-// Prevent splash auto-hide
+
 SplashScreen.preventAutoHideAsync();
 
 export default function Layout() {

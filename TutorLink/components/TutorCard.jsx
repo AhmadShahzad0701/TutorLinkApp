@@ -1,6 +1,6 @@
 import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { useState } from 'react';
+import React, { memo, useCallback, useState } from 'react';
 import {
   Alert,
   Image,
@@ -14,24 +14,31 @@ const TutorCard = ({ tutor }) => {
   const router = useRouter();
   const [selectedRating, setSelectedRating] = useState(tutor.rating || 0);
 
-  const handleImagePress = () => {
+  const handleImagePress = useCallback(() => {
     router.push({
       pathname: 'screens/(hidden)/TutorDataFetcherScreen',
       params: { tutorName: tutor.name },
     });
-  };
+  }, [router, tutor.name]);
 
-  const handleStarPress = (star) => {
+  const handleStarPress = useCallback((star) => {
     setSelectedRating(star);
     Alert.alert('Thank you!', `You rated ${star} star${star > 1 ? 's' : ''}`);
-  };
+  }, []);
 
   return (
     <View style={styles.cardOuter}>
       <View style={styles.cardInner}>
         <TouchableOpacity onPress={handleImagePress} activeOpacity={0.85}>
           <View style={styles.imageHalf}>
-            <Image source={{ uri: tutor.imageUrl }} style={styles.avatar} />
+            <Image
+              source={
+                tutor.imageUrl
+                  ? { uri: tutor.imageUrl }
+                  : require('../assets/images/placeholder.jpeg')
+              }
+              style={styles.avatar}
+            />
           </View>
         </TouchableOpacity>
 
@@ -71,7 +78,8 @@ const TutorCard = ({ tutor }) => {
   );
 };
 
-export default TutorCard;
+
+export default memo(TutorCard);
 
 const styles = StyleSheet.create({
   cardOuter: {
