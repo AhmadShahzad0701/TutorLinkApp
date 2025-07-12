@@ -2,7 +2,8 @@ import { Feather, MaterialIcons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
 import * as ImagePicker from 'expo-image-picker';
 import { useRouter } from 'expo-router';
-import { useState } from 'react';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { useEffect, useState } from 'react';
 import {
   Alert,
   Image,
@@ -15,6 +16,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { auth, db } from '../../../lib/firebase';
 
 const EditProfile = () => {
   const router = useRouter();
@@ -27,6 +29,34 @@ const EditProfile = () => {
   const [fee, setFee] = useState('');
   const [location, setLocation] = useState('');
   const [profileImage, setProfileImage] = useState(null);
+
+  // ✅ Fetch user data properly
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const user = auth.currentUser;
+      if (user) {
+        try {
+          const docRef = doc(db, 'User', user.uid);
+          const docSnap = await getDoc(docRef);
+          if (docSnap.exists()) {
+            const data = docSnap.data();
+            setName(data.name || '');
+            setEmail(data.email || '');
+            setPhone(data.phone || '');
+            setEducation(data.education || '');
+            setSubjects(data.subjects || '');
+            setFee(data.fee || '');
+            setLocation(data.location || '');
+            setProfileImage(data.profileImage || null);
+          }
+        } catch (error) {
+          console.error('Error loading profile:', error.message);
+        }
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   const handleImagePick = async () => {
     const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -47,27 +77,37 @@ const EditProfile = () => {
     }
   };
 
-  const handleSave = () => {
-    if (!name || !email || !phone || !education || !subjects || !location || !fee) {
+  const handleSave = async () => {
+    if (!name || !phone || !education || !subjects || !location || !fee) {
       Alert.alert('Missing Info', 'Please fill all the fields.');
       return;
     }
 
-    const encodedImage = profileImage ? encodeURIComponent(profileImage) : '';
+    try {
+      const user = auth.currentUser;
+      if (user) {
+        await setDoc(doc(db, 'User', user.uid), {
+          uid: user.uid,
+          email: user.email,
+          name,
+          phone,
+          education,
+          subjects,
+          location,
+          fee,
+          profileImage: profileImage || '',
+          updatedAt: new Date().toISOString(),
+        });
 
-    router.replace({
-      pathname: '/screens/(hidden)/Profile',
-      params: {
-        name,
-        email,
-        phone,
-        education,
-        subjects,
-        location,
-        fee,
-        image: encodedImage,
-      },
-    });
+        Alert.alert('Success', 'Profile updated successfully!');
+        router.replace('/screens/(hidden)/HomeScreen');
+      } else {
+        Alert.alert('Error', 'User not authenticated.');
+      }
+    } catch (error) {
+      console.error('Error saving profile:', error.message);
+      Alert.alert('Error', 'Failed to save profile.');
+    }
   };
 
   return (
@@ -81,8 +121,7 @@ const EditProfile = () => {
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-
-        <TouchableOpacity style={styles.backButton} onPress={() => router.replace('/')}>
+        <TouchableOpacity style={styles.backButton} onPress={() => router.replace('/screens/(hidden)/HomeScreen')}>
           <MaterialIcons name="arrow-back" size={28} color="#007acc" />
         </TouchableOpacity>
 
@@ -104,7 +143,12 @@ const EditProfile = () => {
           </TouchableOpacity>
 
           <TextInput placeholder="Full Name" value={name} onChangeText={setName} style={styles.input} />
-          <TextInput placeholder="Email" value={email} onChangeText={setEmail} style={styles.input} />
+          <TextInput
+            placeholder="Email (read-only)"
+            value={email}
+            editable={false}
+            style={styles.input}
+          />
           <TextInput placeholder="Phone" value={phone} onChangeText={setPhone} style={styles.input} />
           <TextInput
             placeholder="Describe your background, education, experience, etc."
@@ -182,8 +226,6 @@ const styles = StyleSheet.create({
     padding: 5,
     marginTop: 20,
   },
-
-  // Header Styling
   headerContainer: {
     backgroundColor: '#007acc',
     paddingTop: 80,
@@ -199,8 +241,6 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
   },
-
-  // Card Styling
   card: {
     backgroundColor: '#fff',
     marginTop: -20,

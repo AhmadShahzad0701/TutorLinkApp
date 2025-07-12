@@ -1,6 +1,7 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { useState } from 'react';
+import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
+import { useEffect, useState } from 'react';
 import {
   Alert,
   Image,
@@ -10,8 +11,6 @@ import {
   TextInput,
   TouchableOpacity
 } from 'react-native';
-
-import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../../lib/firebase';
 
 const Login = () => {
@@ -20,23 +19,36 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = async () => {
+    useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        router.replace('/screens/(hidden)/HomeScreen');
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+  const handleLogin = async (e) => {
     if (!email || !password) {
       Alert.alert('Error', 'Please enter both email and password.');
       return;
     }
 
+    e.preventDefault();
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-      console.log('User logged in:', user.email);
 
+      await signInWithEmailAndPassword(auth, email, password);
       Alert.alert('Login Success', 'Welcome back!');
-      router.replace('/'); // Or wherever your home page is
-    } catch (error) {
-      console.error('Login Error:', error.message);
-      Alert.alert('Login Failed', error.message);
+      router.replace('/screens/(hidden)/EditProfile'); 
+
     }
+    catch (error) {
+      console.error(error.message);
+      Alert.alert('Error', error.message);
+    }
+    // console.log('User logged in (demo):', email);
+    // Alert.alert('Login Success', 'Welcome back!');
+    // router.replace('/'); 
   };
 
   return (

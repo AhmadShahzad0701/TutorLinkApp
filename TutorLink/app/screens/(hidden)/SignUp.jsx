@@ -1,33 +1,38 @@
-// screens/(hidden)/SignUp.jsx
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import React, { useState } from 'react';
+import { doc, setDoc } from "firebase/firestore";
+import { useState } from 'react';
 import {
   Alert,
   Image,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
+  TouchableWithoutFeedback
 } from 'react-native';
-import { auth } from '../../../lib/firebase';
 
+
+import { auth, db } from '../../../lib/firebase';
 const SignUp = () => {
   const navigation = useNavigation();
   const router = useRouter();
-
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const handleSignUp = async () => {
+  const handleSignUp = async(e) => {
+
     if (!name || !email || !password || !confirmPassword) {
       Alert.alert('Error', 'All fields are required.');
-      return;
+      return
     }
 
     if (password !== confirmPassword) {
@@ -35,79 +40,97 @@ const SignUp = () => {
       return;
     }
 
-    try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
+    e.preventDefault();
+try {
+  await createUserWithEmailAndPassword(auth, email, password);
+  const user = auth.currentUser;
+  Alert.alert('Success', 'Account created!');
 
-      console.log('User signed up:', { name, email });
-      Alert.alert('Success', 'Account successfully created');
-      navigation.navigate('Home'); // or router.replace('/Home') if using Expo Router
-    } catch (error) {
-      console.error(error);
-      Alert.alert('Signup Error', error.message);
-    }
+  if (user) {
+    await setDoc(doc(db, "User", user.uid), {
+      email: user.email,
+      name: name, 
+    });
+  }
+
+  router.replace('/screens/(hidden)/HomeScreen');
+} catch (error) {
+  console.error(error.message);
+  Alert.alert('Error', error.message);
+}
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      {/* Back Icon */}
-      <TouchableOpacity
-        style={styles.backButton}
-        onPress={() => router.replace('/')}
-      >
-        <MaterialIcons name="arrow-back" size={28} color="#007acc" />
-      </TouchableOpacity>
-
-      <Image
-        source={require('../../../assets/images/Logo.png')}
-        style={styles.logo}
-      />
-      <Text style={styles.heading}>Create Your Account</Text>
-
-      <TextInput
-        placeholder="Full Name"
-        value={name}
-        onChangeText={setName}
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="Confirm Password"
-        value={confirmPassword}
-        onChangeText={setConfirmPassword}
-        secureTextEntry
-        style={styles.input}
-      />
-
-      <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-        <Text style={styles.buttonText}>Sign Up</Text>
-      </TouchableOpacity>
-
-      <Text style={styles.footerText}>
-        Already have an account?{' '}
-        <Text
-          style={styles.link}
-          onPress={() => router.push('/screens/(hidden)/Login')}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={{ flex: 1 }}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <ScrollView
+          contentContainerStyle={styles.container}
+          keyboardShouldPersistTaps="handled"
         >
-          Log in
-        </Text>
-      </Text>
-    </ScrollView>
+          <TouchableOpacity
+            style={styles.backButton}
+            onPress={() => router.replace('/')}
+          >
+            <MaterialIcons name="arrow-back" size={28} color="#007acc" />
+          </TouchableOpacity>
+
+          <Image
+            source={require('../../../assets/images/Logo.png')}
+            style={styles.logo}
+          />
+          <Text style={styles.heading}>Create Your Account</Text>
+
+          <TextInput
+            placeholder="Full Name"
+            value={name}
+            onChangeText={setName}
+            style={styles.input}
+          />
+          <TextInput
+            placeholder="Email"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            style={styles.input}
+          />
+          <TextInput
+            placeholder="Password"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+            style={styles.input}
+          />
+          <TextInput
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
+            secureTextEntry
+            style={styles.input}
+          />
+
+          <TouchableOpacity style={styles.button} onPress={handleSignUp}>
+            <Text style={styles.buttonText}>Sign Up</Text>
+          </TouchableOpacity>
+
+          <Text style={styles.footerText}>
+            Already have an account?{' '}
+            <Text
+              style={styles.link}
+              onPress={() => router.push('/screens/(hidden)/Login')}
+            >
+              Log in
+            </Text>
+          </Text>
+        </ScrollView>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {
@@ -176,3 +199,4 @@ const styles = StyleSheet.create({
 });
 
 export default SignUp;
+

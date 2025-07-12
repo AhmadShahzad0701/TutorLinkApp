@@ -4,7 +4,6 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import Header from '../components/Header';
 
-
 SplashScreen.preventAutoHideAsync();
 
 export default function Layout() {
@@ -20,12 +19,21 @@ export default function Layout() {
     <Drawer
       screenOptions={{
         drawerLabelStyle: {
-          fontSize: 18, 
+          fontSize: 18,
         },
       }}
     >
+
       <Drawer.Screen
-        name="index"
+        name="screens/(hidden)/SignUp"
+        options={{
+          drawerItemStyle: { display: 'none' },
+          headerShown: false,
+        }}
+      />
+
+      <Drawer.Screen
+        name="screens/(hidden)/HomeScreen"
         options={{
           title: 'Home',
           drawerLabel: 'Home',
@@ -48,8 +56,6 @@ export default function Layout() {
         }}
       />
 
-      
-
       <Drawer.Screen
         name="screens/(hidden)/EditProfile"
         options={{
@@ -57,6 +63,18 @@ export default function Layout() {
           drawerLabel: 'Edit My Profile',
           drawerIcon: ({ color, size }) => (
             <FontAwesome name="edit" size={size} color={color} />
+          ),
+          headerShown: false,
+        }}
+      />
+
+      <Drawer.Screen
+        name="screens/(hidden)/TutorProfile"
+        options={{
+          title: 'My Tutor Profile',
+          drawerLabel: 'My Tutor Profile',
+          drawerIcon: ({ color, size }) => (
+            <FontAwesome name="user" size={size} color={color} />
           ),
           headerShown: false,
         }}
@@ -73,6 +91,7 @@ export default function Layout() {
           header: () => <Header />,
         }}
       />
+
       <Drawer.Screen
         name="screens/(hidden)/Login"
         options={{
@@ -86,21 +105,19 @@ export default function Layout() {
       />
 
       <Drawer.Screen
-        name="screens/(hidden)/SignUp"
+        name="screens/(hidden)/DeleteAccount"
         options={{
-          title: 'Logout',
-          drawerLabel: 'Logout',
+          title: 'Delete Account',
+          drawerLabel: 'Delete Account',
           drawerIcon: ({ color, size }) => (
-            <FontAwesome name="sign-out" size={size} color={color} />
+            <FontAwesome name="trash" size={size} color={color} />
           ),
-          headerShown: false,
+          headerShown: false, 
         }}
       />
 
-      {/* <Drawer.Screen
-        name="screens/(hidden)/SignUp"
-        options={{ drawerItemStyle: { display: 'none' }, headerShown: false }}
-      /> */}
+
+
       <Drawer.Screen
         name="screens/(hidden)/TutorDataFetcherScreen"
         options={{ drawerItemStyle: { display: 'none' }, headerShown: false }}
@@ -109,11 +126,14 @@ export default function Layout() {
         name="screens/(hidden)/TutorDetails"
         options={{ drawerItemStyle: { display: 'none' }, headerShown: false }}
       />
-      <Drawer.Screen
-        name="screens/(hidden)/HomeScreen"
-        options={{ drawerItemStyle: { display: 'none' }, headerShown: false }}
-      />
 
+      <Drawer.Screen
+        name="index"
+        options={{
+          drawerItemStyle: { display: 'none' },
+          header: () => <Header />,
+        }}
+      />
 
     </Drawer>
   );

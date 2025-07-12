@@ -1,24 +1,26 @@
-// firebase.js
-import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
+// Import Firebase SDKs
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getApp, getApps, initializeApp } from 'firebase/app';
+import { getReactNativePersistence, initializeAuth } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
-
+// Your Firebase config
 const firebaseConfig = {
-  apiKey: "AIzaSyCKmc0PjCQwCW9eGCQLPLPkeUc8MJDWOec",
-  authDomain: "tutorlinkapp-a8eca.firebaseapp.com",
-  projectId: "tutorlinkapp-a8eca",
-  storageBucket: "tutorlinkapp-a8eca.firebasestorage.app",
-  messagingSenderId: "111883632880",
-  appId: "1:111883632880:web:e9665a801465aebc6c4235",
-  measurementId: "G-M364P7VL1C"
+  apiKey: "AIzaSyDbxnjtTjwlh7RjRA3ocJGttMkdb15ApJ4",
+  authDomain: "tutorlink-d91bd.firebaseapp.com",
+  projectId: "tutorlink-d91bd",
+  storageBucket: "tutorlink-d91bd.firebasestorage.app",
+  messagingSenderId: "736175499828",
+  appId: "1:736175499828:web:12da09e77c20e65d4b3861"
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
+// Initialize app once
+const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 
-// Optional: Firebase features
-const auth = getAuth(app);
+// Initialize auth with AsyncStorage
+const auth = initializeAuth(app, {
+  persistence: getReactNativePersistence(AsyncStorage),
+});
 const db = getFirestore(app);
 
-export { auth, db };
+export { app, auth, db };
 

@@ -6,32 +6,31 @@ import { useEffect, useState } from 'react';
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { auth, db } from '../../../lib/firebase';
 
-const Profile = () => {
+const TutorProfile = () => {
   const router = useRouter();
   const [userDetails, setUserDetails] = useState(null);
 
-
-useEffect(() => {
-  const unsubscribe = onAuthStateChanged(auth, async (user) => {
-    if (user) {
-      try {
-        const docRef = doc(db, 'User', user.uid);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          setUserDetails(docSnap.data());
-        } else {
-          console.log('User document not found');
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        try {
+          const docRef = doc(db, 'User', user.uid);
+          const docSnap = await getDoc(docRef);
+          if (docSnap.exists()) {
+            setUserDetails(docSnap.data());
+          } else {
+            console.log('User document not found');
+          }
+        } catch (error) {
+          console.error('Error fetching user data:', error.message);
         }
-      } catch (error) {
-        console.error('Error fetching user data:', error.message);
+      } else {
+        console.log('No user logged in');
       }
-    } else {
-      console.log('No user logged in');
-    }
-  });
-  
-  return unsubscribe;
-}, []);
+    });
+
+    return unsubscribe;
+  }, []);
 
   if (!userDetails) {
     return (
@@ -69,7 +68,7 @@ useEffect(() => {
       </TouchableOpacity>
 
       <View style={styles.headerContainer}>
-        <Text style={styles.heading}>My Profile</Text>
+        <Text style={styles.heading}>Tutor Profile</Text>
       </View>
 
       <View style={styles.card}>
@@ -108,7 +107,7 @@ useEffect(() => {
   );
 };
 
-export default Profile;
+export default TutorProfile;
 
 const styles = StyleSheet.create({
   container: {
