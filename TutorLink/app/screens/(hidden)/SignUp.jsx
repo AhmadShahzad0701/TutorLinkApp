@@ -1,7 +1,9 @@
-import { MaterialIcons } from '@expo/vector-icons'; // ✅ For back icon
+// screens/(hidden)/SignUp.jsx
+import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
-import { useState } from 'react';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import React, { useState } from 'react';
 import {
   Alert,
   Image,
@@ -9,8 +11,9 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity
+  TouchableOpacity,
 } from 'react-native';
+import { auth } from '../../../lib/firebase';
 
 const SignUp = () => {
   const navigation = useNavigation();
@@ -21,24 +24,33 @@ const SignUp = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const handleSignUp = () => {
+  const handleSignUp = async () => {
     if (!name || !email || !password || !confirmPassword) {
       Alert.alert('Error', 'All fields are required.');
       return;
     }
+
     if (password !== confirmPassword) {
       Alert.alert('Error', 'Passwords do not match.');
       return;
     }
 
-    console.log('User signed up:', { name, email });
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
 
-    navigation.navigate('Home');
+      console.log('User signed up:', { name, email });
+      Alert.alert('Success', 'Account successfully created');
+      navigation.navigate('Home'); // or router.replace('/Home') if using Expo Router
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Signup Error', error.message);
+    }
   };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {/* ✅ Back Icon */}
+      {/* Back Icon */}
       <TouchableOpacity
         style={styles.backButton}
         onPress={() => router.replace('/')}
@@ -88,7 +100,8 @@ const SignUp = () => {
         Already have an account?{' '}
         <Text
           style={styles.link}
-          onPress={() => router.push('/screens/(hidden)/Login')}>
+          onPress={() => router.push('/screens/(hidden)/Login')}
+        >
           Log in
         </Text>
       </Text>
@@ -114,6 +127,7 @@ const styles = StyleSheet.create({
     width: 150,
     height: 150,
     borderRadius: 100,
+    marginBottom: 20,
   },
   heading: {
     fontSize: 24,

@@ -1,6 +1,5 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-
 import { useState } from 'react';
 import {
   Alert,
@@ -12,21 +11,32 @@ import {
   TouchableOpacity
 } from 'react-native';
 
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../../lib/firebase';
+
 const Login = () => {
   const router = useRouter();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!email || !password) {
       Alert.alert('Error', 'Please enter both email and password.');
       return;
     }
 
-    console.log('User logged in:', { email });
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      console.log('User logged in:', user.email);
 
-    router.replace('/');
+      Alert.alert('Login Success', 'Welcome back!');
+      router.replace('/'); // Or wherever your home page is
+    } catch (error) {
+      console.error('Login Error:', error.message);
+      Alert.alert('Login Failed', error.message);
+    }
   };
 
   return (
@@ -37,6 +47,7 @@ const Login = () => {
       >
         <MaterialIcons name="arrow-back" size={28} color="#007acc" />
       </TouchableOpacity>
+
       <Image
         source={require('../../../assets/images/Logo.png')}
         style={styles.logo}
@@ -92,7 +103,7 @@ const styles = StyleSheet.create({
     height: 120,
     resizeMode: 'contain',
     marginBottom: 20,
-    borderRadius : 70,
+    borderRadius: 70,
   },
   heading: {
     fontSize: 24,
@@ -138,10 +149,10 @@ const styles = StyleSheet.create({
     color: '#007acc',
     fontWeight: '600',
   },
-    backButton: {
+  backButton: {
     position: 'absolute',
     top: 50,
     left: 20,
     zIndex: 10,
-    }
+  }
 });

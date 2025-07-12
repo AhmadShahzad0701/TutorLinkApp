@@ -1,12 +1,13 @@
 // app/index.jsx
 import React from 'react';
 import { View } from 'react-native';
-import HomeScreen from './screens/(hidden)/HomeScreen';
+import SignUp from './screens/(hidden)/SignUp';
+// import HomeScreen from './screens/(hidden)/HomeScreen'; // comment out for now
 
 const Index = () => {
   return (
     <View style={{ flex: 1 }}>
-      <HomeScreen />
+      <SignUp />
     </View>
   );
 };
