@@ -67,7 +67,13 @@ export default function Layout() {
           headerShown: false,
         }}
       />
-
+      <Drawer.Screen
+          name="screens/(hidden)/BecomeTutor"
+          options={{
+            drawerItemStyle: { display: 'none' },
+            headerShown: false,
+          }}
+      />
       <Drawer.Screen
         name="screens/(hidden)/TutorProfile"
         options={{

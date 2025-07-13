@@ -18,7 +18,7 @@ const HomeScreen = () => {
 
       <TouchableOpacity
         style={styles.tutorCard}
-        onPress={() => router.push('/screens/(hidden)/EditProfile')}
+        onPress={() => router.push('/screens/(hidden)/BecomeTutor')}
       >
         <FontAwesome6 name="user-plus" size={22} color="black" />
         <View style={styles.tutorCardTextWrapper}>
