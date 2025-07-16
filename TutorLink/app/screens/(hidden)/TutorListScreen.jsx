@@ -1,5 +1,3 @@
-//List of tutor for Students
-
 import { Feather, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -8,6 +6,10 @@ import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native
 import TutorCard from '../../../components/TutorCard';
 import tutors from '../../../data';
 
+// ✅ Firestore imports
+import { collection, onSnapshot, query, where } from 'firebase/firestore';
+import { db } from '../../../lib/firebase';
+
 const TutorListScreen = () => {
   const router = useRouter();
   const { search = '', subject = '', location = '' } = useLocalSearchParams();
@@ -15,25 +17,42 @@ const TutorListScreen = () => {
   const [selectedSubject, setSelectedSubject] = useState(subject);
   const [selectedLocation, setSelectedLocation] = useState(location);
 
+  // ✅ Firestore tutors
+  const [firebaseTutors, setFirebaseTutors] = useState([]);
+
+  useEffect(() => {
+    // ✅ Listen to tutors from Firebase (isTutor = true)
+    const q = query(collection(db, 'User'), where('isTutor', '==', true));
+    const unsubscribe = onSnapshot(q, snapshot => {
+      const fetched = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setFirebaseTutors(fetched);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   useEffect(() => {
     setSelectedSubject(subject);
     setSelectedLocation(location);
-
     return () => {
       setSelectedSubject('');
       setSelectedLocation('');
     };
   }, [subject, location]);
 
-  const filteredTutors = tutors.filter((tutor) => {
-    const tutorSubject = tutor.subject?.toLowerCase() || '';
-    const tutorLocation = tutor.location?.toLowerCase() || '';
-    const tutorName = tutor.name?.toLowerCase() || '';
+  // ✅ Combine both local and firebase tutors
+  const allTutors = [...tutors, ...firebaseTutors];
+
+  // ✅ Apply filters
+  const filteredTutors = allTutors.filter(tutor => {
+    const name = (tutor.name || '').toLowerCase();
+    const tutorSubject = (tutor.subject || '').toLowerCase();
+    const tutorLocation = (tutor.location || '').toLowerCase();
 
     const matchSubject = selectedSubject ? tutorSubject === selectedSubject.toLowerCase() : true;
     const matchLocation = selectedLocation ? tutorLocation === selectedLocation.toLowerCase() : true;
     const matchSearch = search
-      ? tutorName.includes(search.toLowerCase()) ||
+      ? name.includes(search.toLowerCase()) ||
         tutorSubject.includes(search.toLowerCase()) ||
         tutorLocation.includes(search.toLowerCase())
       : true;
