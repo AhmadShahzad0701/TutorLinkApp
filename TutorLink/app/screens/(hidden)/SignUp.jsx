@@ -1,4 +1,3 @@
-import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
@@ -71,12 +70,12 @@ try {
           contentContainerStyle={styles.container}
           keyboardShouldPersistTaps="handled"
         >
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={styles.backButton}
             onPress={() => router.replace('/')}
           >
             <MaterialIcons name="arrow-back" size={28} color="#007acc" />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
 
           <Image
             source={require('../../../assets/images/Logo.png')}

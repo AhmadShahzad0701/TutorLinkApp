@@ -74,17 +74,6 @@ export default function Layout() {
             headerShown: false,
           }}
       />
-      <Drawer.Screen
-        name="screens/(hidden)/TutorProfile"
-        options={{
-          title: 'My Tutor Profile',
-          drawerLabel: 'My Tutor Profile',
-          drawerIcon: ({ color, size }) => (
-            <FontAwesome name="user" size={size} color={color} />
-          ),
-          headerShown: false,
-        }}
-      />
 
       <Drawer.Screen
         name="screens/(hidden)/TutorListScreen"
@@ -126,10 +115,6 @@ export default function Layout() {
 
       <Drawer.Screen
         name="screens/(hidden)/TutorDataFetcherScreen"
-        options={{ drawerItemStyle: { display: 'none' }, headerShown: false }}
-      />
-      <Drawer.Screen
-        name="screens/(hidden)/TutorDetails"
         options={{ drawerItemStyle: { display: 'none' }, headerShown: false }}
       />
 

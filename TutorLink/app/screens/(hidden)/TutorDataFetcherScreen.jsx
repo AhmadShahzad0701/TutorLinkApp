@@ -46,9 +46,9 @@ const TutorDataFetcherScreen = () => {
   return (
     <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
       {/* Back Button */}
-      <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-        <MaterialIcons name="arrow-back" size={28} color="#007acc" />
-      </TouchableOpacity>
+       <TouchableOpacity style={styles.backButton} onPress={() => router.replace('/screens/(hidden)/HomeScreen')}>
+            <MaterialIcons name="arrow-back" size={28} color="#007acc" />
+        </TouchableOpacity>
 
       {/* Header */}
       <View style={styles.headerContainer} />

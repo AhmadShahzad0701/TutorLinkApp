@@ -5,15 +5,15 @@ import { useRouter } from 'expo-router';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import {
-    Alert,
-    KeyboardAvoidingView,
-    Platform,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import { auth, db } from '../../../lib/firebase';
 
@@ -73,7 +73,7 @@ export default function BecomeTutor() {
       );
 
       Alert.alert('Success', 'Tutor profile saved!');
-      router.replace('/screens/(hidden)/TutorProfile');
+      router.replace('/screens/(hidden)/HomePage');
     } catch (err) {
       console.error(err);
       Alert.alert('Error', 'Could not save tutor profile.');
@@ -88,8 +88,8 @@ export default function BecomeTutor() {
     >
       <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
         {/* Back button */}
-        <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-          <MaterialIcons name="arrow-back" size={28} color="#007acc" />
+        <TouchableOpacity style={styles.backButton} onPress={() => router.replace('/screens/(hidden)/HomeScreen')}>
+                <MaterialIcons name="arrow-back" size={28} color="#007acc" />
         </TouchableOpacity>
 
         <View style={styles.header}>
