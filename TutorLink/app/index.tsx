@@ -13,7 +13,7 @@ const Index = () => {
       if (user) {
         router.replace('/screens/(hidden)/HomeScreen');
       } else {
-        router.replace('/screens/(hidden)/SignUp');
+        router.replace('/screens/(hidden)/Login');
       }
       setLoading(false);
     });

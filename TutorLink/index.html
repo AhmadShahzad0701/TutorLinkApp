@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Upload Tutors to Firestore</title>
+  <script type="module">
+    // Import Firebase modules
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+    import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+    // Your Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyDbxnjtTjwlh7RjRA3ocJGttMkdb15ApJ4",
+      authDomain: "tutorlink-d91bd.firebaseapp.com",
+      projectId: "tutorlink-d91bd",
+      storageBucket: "tutorlink-d91bd.appspot.com",
+      messagingSenderId: "736175499828",
+      appId: "1:736175499828:web:12da09e77c20e65d4b3861",
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Tutors array
+    const tutors = [
+      {
+        name: "Fatima Khan",
+        email: "fatima.khan@example.com",
+        phone: "03001234567",
+        education: "MSc Biology - Karachi University",
+        subject: "Biology",
+        rating: "4.8",
+        price: "1500",
+        location: "Karachi",
+        imageUrl: "https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg",
+        isTutor: true,
+      },
+      {
+        name: "Ali Raza",
+        email: "ali.raza@example.com",
+        phone: "03012345678",
+        education: "MA English - NUML",
+        subject: "Language",
+        rating: "4.7",
+        price: "1000",
+        location: "Islamabad",
+        imageUrl: "https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg",
+        isTutor: true,
+      },
+      {
+        name: "Ayesha Malik",
+        email: "ayesha.malik@example.com",
+        phone: "03111223344",
+        education: "MPhil Chemistry - Punjab University",
+        subject: "Chemistry",
+        rating: "5.0",
+        price: "2000",
+        location: "Lahore",
+        imageUrl: "https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg",
+        isTutor: true,
+      },
+      {
+        name: "Usman Tariq",
+        email: "usman.tariq@example.com",
+        phone: "03451234567",
+        education: "BS Mathematics - GCU Faisalabad",
+        subject: "Math",
+        rating: "4.9",
+        price: "1800",
+        location: "Faisalabad",
+        imageUrl: "https://images.pexels.com/photos/1704488/pexels-photo-1704488.jpeg",
+        isTutor: true,
+      },
+      {
+        name: "Hira Sohail",
+        email: "hira.sohail@example.com",
+        phone: "03334445555",
+        education: "BA Philosophy - BZU Multan",
+        subject: "Philosophy",
+        rating: "4.6",
+        price: "1200",
+        location: "Multan",
+        imageUrl: "https://images.pexels.com/photos/415829/pexels-photo-415829.jpeg",
+        isTutor: true,
+      }
+    ];
+
+    // Upload function
+    window.uploadTutors = async function () {
+      for (const tutor of tutors) {
+        try {
+          await addDoc(collection(db, "User"), tutor);
+          console.log("✅ Added:", tutor.name);
+        } catch (err) {
+          console.error("❌ Error adding:", tutor.name, err);
+        }
+      }
+      alert("🎉 All tutors uploaded successfully!");
+    };
+  </script>
+</head>
+<body>
+  <h2>Upload Tutors to Firebase Firestore</h2>
+  <button onclick="uploadTutors()">Upload Tutors</button>
+</body>
+</html>
