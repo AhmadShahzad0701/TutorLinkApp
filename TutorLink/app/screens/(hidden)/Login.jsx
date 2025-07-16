@@ -1,7 +1,7 @@
 import { MaterialIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
-import { useEffect, useState } from 'react';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { useState } from 'react';
 import {
   Alert,
   Image,
@@ -19,15 +19,7 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-    useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        router.replace('/screens/(hidden)/HomeScreen');
-      }
-    });
 
-    return () => unsubscribe();
-  }, []);
   const handleLogin = async (e) => {
     if (!email || !password) {
       Alert.alert('Error', 'Please enter both email and password.');
@@ -55,7 +47,7 @@ const Login = () => {
     <ScrollView contentContainerStyle={styles.container}>
       <TouchableOpacity
         style={styles.backButton}
-        onPress={() => router.replace('/')}
+        onPress={() => router.replace('/screens/(hidden)/SignUp')}
       >
         <MaterialIcons name="arrow-back" size={28} color="#007acc" />
       </TouchableOpacity>
@@ -168,3 +160,4 @@ const styles = StyleSheet.create({
     zIndex: 10,
   }
 });
+

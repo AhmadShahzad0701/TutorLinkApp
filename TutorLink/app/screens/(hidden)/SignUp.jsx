@@ -1,8 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
 import { doc, setDoc } from "firebase/firestore";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Alert,
   Image,
@@ -17,7 +17,6 @@ import {
   TouchableWithoutFeedback
 } from 'react-native';
 
-
 import { auth, db } from '../../../lib/firebase';
 const SignUp = () => {
   const navigation = useNavigation();
@@ -26,6 +25,16 @@ const SignUp = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+
+useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        router.replace('/screens/(hidden)/HomeScreen');
+      }
+    });
+
+    return () => unsubscribe();
+}, []);
 
   const handleSignUp = async(e) => {
 
@@ -52,7 +61,7 @@ try {
     });
   }
 
-  router.replace('/screens/(hidden)/HomeScreen');
+  router.replace('/screens/(hidden)/Login');
 } catch (error) {
   console.error(error.message);
   Alert.alert('Error', error.message);
