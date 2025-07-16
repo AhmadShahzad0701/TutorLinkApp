@@ -1,4 +1,3 @@
-import { MaterialIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
 import { useEffect, useState } from 'react';
@@ -12,7 +11,6 @@ import {
   TouchableOpacity
 } from 'react-native';
 import { auth } from '../../../lib/firebase';
-
 const Login = () => {
   const router = useRouter();
 
@@ -53,12 +51,12 @@ const Login = () => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={styles.backButton}
         onPress={() => router.replace('/')}
       >
         <MaterialIcons name="arrow-back" size={28} color="#007acc" />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
       <Image
         source={require('../../../assets/images/Logo.png')}

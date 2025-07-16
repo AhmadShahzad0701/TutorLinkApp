@@ -49,6 +49,7 @@ try {
     await setDoc(doc(db, "User", user.uid), {
       email: user.email,
       name: name, 
+      isTutor: false
     });
   }
 
