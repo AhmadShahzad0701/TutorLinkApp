@@ -1,37 +1,51 @@
 import { Feather, MaterialIcons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { onAuthStateChanged } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, onSnapshot } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { auth, db } from '../../../lib/firebase';
 
 const Profile = () => {
   const router = useRouter();
   const [userDetails, setUserDetails] = useState(null);
 
-
-useEffect(() => {
-  const unsubscribe = onAuthStateChanged(auth, async (user) => {
-    if (user) {
-      try {
+  useEffect(() => {
+    // Auth state listener
+    const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // Real-time listener for user document
         const docRef = doc(db, 'User', user.uid);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          setUserDetails(docSnap.data());
-        } else {
-          console.log('User document not found');
-        }
-      } catch (error) {
-        console.error('Error fetching user data:', error.message);
+        const unsubscribeDoc = onSnapshot(
+          docRef,
+          (docSnap) => {
+            if (docSnap.exists()) {
+              setUserDetails(docSnap.data());
+            } else {
+              console.log('User document not found');
+            }
+          },
+          (error) => {
+            console.error('Error fetching user data:', error.message);
+          }
+        );
+
+        // Clean up the Firestore listener when component unmounts or user logs out
+        return () => unsubscribeDoc();
+      } else {
+        console.log('No user logged in');
       }
-    } else {
-      console.log('No user logged in');
-    }
-  });
-  
-  return unsubscribe;
-}, []);
+    });
+
+    return () => unsubscribeAuth();
+  }, []);
 
   if (!userDetails) {
     return (
@@ -63,8 +77,14 @@ useEffect(() => {
   );
 
   return (
-    <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
-      <TouchableOpacity style={styles.backButton} onPress={() => router.replace('/screens/(hidden)/HomeScreen')}>
+    <ScrollView
+      contentContainerStyle={styles.container}
+      showsVerticalScrollIndicator={false}
+    >
+      <TouchableOpacity
+        style={styles.backButton}
+        onPress={() => router.replace('/screens/(hidden)/HomeScreen')}
+      >
         <MaterialIcons name="arrow-back" size={28} color="#007acc" />
       </TouchableOpacity>
 

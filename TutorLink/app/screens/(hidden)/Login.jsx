@@ -29,26 +29,22 @@ const Login = () => {
 
       await signInWithEmailAndPassword(auth, email, password);
       Alert.alert('Login Success', 'Welcome back!');
-      router.replace('/screens/(hidden)/EditProfile'); 
+      router.replace('/screens/(hidden)/HomeScreen');
+
+      setEmail('');
+      setPassword('');
 
     }
     catch (error) {
       console.error(error.message);
       Alert.alert('Error', error.message);
     }
-    // console.log('User logged in (demo):', email);
-    // Alert.alert('Login Success', 'Welcome back!');
-    // router.replace('/'); 
+
   };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {/* <TouchableOpacity
-        style={styles.backButton}
-        onPress={() => router.replace('/screens/(hidden)/SignUp')}
-      >
-        <MaterialIcons name="arrow-back" size={28} color="#007acc" />
-      </TouchableOpacity> */}
+
 
       <Image
         source={require('../../../assets/images/Logo.png')}

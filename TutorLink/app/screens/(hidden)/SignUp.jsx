@@ -53,6 +53,7 @@ try {
   await createUserWithEmailAndPassword(auth, email, password);
   const user = auth.currentUser;
   Alert.alert('Success', 'Account created!');
+  
 
   if (user) {
     await setDoc(doc(db, "User", user.uid), {
@@ -61,6 +62,11 @@ try {
       isTutor: false
     });
   }
+
+    setName('');
+    setEmail('');
+    setPassword('');
+    setConfirmPassword('');
 
   router.replace('/screens/(hidden)/Login');
 } catch (error) {
@@ -80,12 +86,6 @@ try {
           contentContainerStyle={styles.container}
           keyboardShouldPersistTaps="handled"
         >
-          {/* <TouchableOpacity
-            style={styles.backButton}
-            onPress={() => router.replace('/')}
-          >
-            <MaterialIcons name="arrow-back" size={28} color="#007acc" />
-          </TouchableOpacity> */}
 
           <Image
             source={require('../../../assets/images/Logo.png')}

@@ -61,7 +61,7 @@ export default function BecomeTutor() {
         doc(db, 'User', user.uid),
         {
           uid: user.uid,
-          isTutor: true,         // <— flag that marks user as tutor
+          isTutor: true,         
           education,
           subjects,
           location,
@@ -69,11 +69,11 @@ export default function BecomeTutor() {
           fee,
           updatedAt: new Date().toISOString(),
         },
-        { merge: true }          // keep any other existing fields
+        { merge: true }          
       );
 
       Alert.alert('Success', 'Tutor profile saved!');
-      router.replace('/screens/(hidden)/HomePage');
+      router.replace('/screens/(hidden)/HomeScreen');
     } catch (err) {
       console.error(err);
       Alert.alert('Error', 'Could not save tutor profile.');
