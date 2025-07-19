@@ -73,7 +73,7 @@ export default function BecomeTutor() {
       );
 
       Alert.alert('Success', 'Tutor profile saved!');
-      router.replace('/screens/(hidden)/HomePage');
+      router.replace('/screens/(hidden)/HomeScreen');
     } catch (err) {
       console.error(err);
       Alert.alert('Error', 'Could not save tutor profile.');

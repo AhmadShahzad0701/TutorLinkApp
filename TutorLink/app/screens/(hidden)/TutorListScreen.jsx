@@ -6,7 +6,6 @@ import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native
 import TutorCard from '../../../components/TutorCard';
 import tutors from '../../../data';
 
-// ✅ Firestore imports
 import { collection, onSnapshot, query, where } from 'firebase/firestore';
 import { db } from '../../../lib/firebase';
 
@@ -17,11 +16,11 @@ const TutorListScreen = () => {
   const [selectedSubject, setSelectedSubject] = useState(subject);
   const [selectedLocation, setSelectedLocation] = useState(location);
 
-  // ✅ Firestore tutors
+  //  Firestore tutors
   const [firebaseTutors, setFirebaseTutors] = useState([]);
 
   useEffect(() => {
-    // ✅ Listen to tutors from Firebase (isTutor = true)
+    //  Listen to tutors from Firebase (isTutor = true)
     const q = query(collection(db, 'User'), where('isTutor', '==', true));
     const unsubscribe = onSnapshot(q, snapshot => {
       const fetched = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
@@ -40,10 +39,10 @@ const TutorListScreen = () => {
     };
   }, [subject, location]);
 
-  // ✅ Combine both local and firebase tutors
+  //  Combine both local and firebase tutors
   const allTutors = [...tutors, ...firebaseTutors];
 
-  // ✅ Apply filters
+  //  Apply filters
   const filteredTutors = allTutors.filter(tutor => {
     const name = (tutor.name || '').toLowerCase();
     const tutorSubject = (tutor.subject || '').toLowerCase();
