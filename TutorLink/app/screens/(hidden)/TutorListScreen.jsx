@@ -18,6 +18,7 @@ const TutorListScreen = () => {
 
   const [firebaseTutors, setFirebaseTutors] = useState([]);
 
+  // 🔥 Fetch tutors from Firestore
   useEffect(() => {
     const q = query(collection(db, 'User'), where('isTutor', '==', true));
     const unsubscribe = onSnapshot(q, snapshot => {
@@ -28,6 +29,7 @@ const TutorListScreen = () => {
     return () => unsubscribe();
   }, []);
 
+  // Update filters when query params change
   useEffect(() => {
     setSelectedSubject(subject);
     setSelectedLocation(location);
@@ -37,17 +39,20 @@ const TutorListScreen = () => {
     };
   }, [subject, location]);
 
-
   const allTutors = [...tutors, ...firebaseTutors];
 
- 
+  // Filter tutors based on dropdowns & search
   const filteredTutors = allTutors.filter(tutor => {
     const name = (tutor.name || '').toLowerCase();
     const tutorSubject = (tutor.subject || '').toLowerCase();
     const tutorLocation = (tutor.location || '').toLowerCase();
 
-    const matchSubject = selectedSubject ? tutorSubject === selectedSubject.toLowerCase() : true;
-    const matchLocation = selectedLocation ? tutorLocation === selectedLocation.toLowerCase() : true;
+    const matchSubject = selectedSubject
+      ? tutorSubject === selectedSubject.toLowerCase()
+      : true;
+    const matchLocation = selectedLocation
+      ? tutorLocation === selectedLocation.toLowerCase()
+      : true;
     const matchSearch = search
       ? name.includes(search.toLowerCase()) ||
         tutorSubject.includes(search.toLowerCase()) ||
@@ -77,7 +82,7 @@ const TutorListScreen = () => {
 
   return (
     <View style={styles.container}>
-
+      {/* Filter Row */}
       <View style={styles.filterRow}>
         <View style={styles.pickerWrapper}>
           <Picker
@@ -124,9 +129,10 @@ const TutorListScreen = () => {
         </View>
       </View>
 
+      {/* Tutor List */}
       <FlatList
         data={filteredTutors}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(item) => item.id?.toString() ?? Math.random().toString()}
         renderItem={({ item }) => <TutorCard tutor={item} />}
         contentContainerStyle={{ paddingBottom: 40, paddingHorizontal: 15 }}
         showsVerticalScrollIndicator={false}
@@ -139,58 +145,14 @@ const TutorListScreen = () => {
 export default TutorListScreen;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f9fafb',
-    paddingTop: 20,
-  },
-  filterRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: 15,
-    marginBottom: 10,
-  },
-  pickerWrapper: {
-    flex: 1,
-    backgroundColor: '#f3f4f6',
-    borderRadius: 8,
-    marginHorizontal: 5,
-    overflow: 'hidden',
-  },
-  picker: {
-    height: 50,
-    width: '100%',
-  },
-  headerRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 20,
-    paddingHorizontal: 15,
-  },
-  iconBox: {
-    backgroundColor: '#E4E8EF',
-    padding: 12,
-    borderRadius: 10,
-    marginRight: 15,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#333',
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#666',
-    marginTop: 4,
-  },
-  resetBtn: {
-    alignSelf: 'flex-end',
-    marginRight: 20,
-    marginBottom: 5,
-  },
-  resetBtnText: {
-    color: '#007acc',
-    fontSize: 14,
-    fontWeight: '600',
-  },
+  container: { flex: 1, backgroundColor: '#f9fafb', paddingTop: 20 },
+  filterRow: { flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 15, marginBottom: 10 },
+  pickerWrapper: { flex: 1, backgroundColor: '#f3f4f6', borderRadius: 8, marginHorizontal: 5, overflow: 'hidden' },
+  picker: { height: 50, width: '100%' },
+  headerRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 20, paddingHorizontal: 15 },
+  iconBox: { backgroundColor: '#E4E8EF', padding: 12, borderRadius: 10, marginRight: 15 },
+  title: { fontSize: 20, fontWeight: 'bold', color: '#333' },
+  subtitle: { fontSize: 16, color: '#666', marginTop: 4 },
+  resetBtn: { alignSelf: 'flex-end', marginRight: 20, marginBottom: 5 },
+  resetBtnText: { color: '#007acc', fontSize: 14, fontWeight: '600' },
 });

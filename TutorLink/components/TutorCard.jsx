@@ -1,6 +1,6 @@
 import { Feather } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import React, { memo, useCallback, useState } from 'react';
+import { memo, useCallback, useState } from 'react';
 import {
   Alert,
   Image,
@@ -15,11 +15,12 @@ const TutorCard = ({ tutor }) => {
   const [selectedRating, setSelectedRating] = useState(tutor.rating || 0);
 
   const handleImagePress = useCallback(() => {
+    // Pass tutorId (doc id) for fetching from Firestore
     router.push({
       pathname: 'screens/(hidden)/TutorDataFetcherScreen',
-      params: { tutorName: tutor.name },
+      params: { tutorId: tutor.id },
     });
-  }, [router, tutor.name]);
+  }, [router, tutor.id]);
 
   const handleStarPress = useCallback((star) => {
     setSelectedRating(star);
@@ -43,21 +44,23 @@ const TutorCard = ({ tutor }) => {
         </TouchableOpacity>
 
         <View style={styles.infoHalf}>
-          <Text style={styles.name}>{tutor.name}</Text>
+          <Text style={styles.name}>{tutor.name || 'Unnamed Tutor'}</Text>
 
           <View style={styles.infoRow}>
             <Text style={styles.label}>Subject:</Text>
-            <Text style={styles.value}>{tutor.subject}</Text>
+            <Text style={styles.value}>{tutor.subjects || 'N/A'}</Text>
           </View>
 
           <View style={styles.infoRow}>
             <Text style={styles.label}>Location:</Text>
-            <Text style={styles.value}>{tutor.location}</Text>
+            <Text style={styles.value}>{tutor.location || 'N/A'}</Text>
           </View>
 
           <View style={styles.infoRow}>
             <Text style={styles.label}>Fee:</Text>
-            <Text style={styles.price}>Rs {tutor.price} / hour</Text>
+            <Text style={styles.price}>
+              {tutor.fee ? `Rs ${tutor.fee} / hour` : 'N/A'}
+            </Text>
           </View>
 
           <View style={styles.ratingRow}>
@@ -77,7 +80,6 @@ const TutorCard = ({ tutor }) => {
     </View>
   );
 };
-
 
 export default memo(TutorCard);
 
