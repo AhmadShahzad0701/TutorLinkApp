@@ -19,15 +19,12 @@ import { auth, db } from '../../../lib/firebase';
 
 export default function BecomeTutor() {
   const router = useRouter();
-
-  // form state
   const [education, setEducation] = useState('');
   const [subjects, setSubjects] = useState('');
   const [location, setLocation] = useState('');
   const [phone, setPhone] = useState('');
   const [fee, setFee] = useState('');
 
-  // fetch existing tutor data (if any)
   useEffect(() => {
     const loadData = async () => {
       const user = auth.currentUser;
@@ -61,7 +58,7 @@ export default function BecomeTutor() {
         doc(db, 'User', user.uid),
         {
           uid: user.uid,
-          isTutor: true,         
+          isTutor: true,
           education,
           subjects,
           location,
@@ -69,7 +66,7 @@ export default function BecomeTutor() {
           fee,
           updatedAt: new Date().toISOString(),
         },
-        { merge: true }          
+        { merge: true }
       );
 
       Alert.alert('Success', 'Tutor profile saved!');
@@ -87,9 +84,8 @@ export default function BecomeTutor() {
       keyboardVerticalOffset={80}
     >
       <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
-        {/* Back button */}
         <TouchableOpacity style={styles.backButton} onPress={() => router.replace('/screens/(hidden)/HomeScreen')}>
-                <MaterialIcons name="arrow-back" size={28} color="#007acc" />
+          <MaterialIcons name="arrow-back" size={28} color="#007acc" />
         </TouchableOpacity>
 
         <View style={styles.header}>
@@ -97,7 +93,6 @@ export default function BecomeTutor() {
         </View>
 
         <View style={styles.card}>
-          {/* Education / Experience */}
           <TextInput
             placeholder="Describe your education & experience"
             value={education}
@@ -106,7 +101,6 @@ export default function BecomeTutor() {
             style={styles.descriptionInput}
           />
 
-          {/* Phone */}
           <TextInput
             placeholder="Phone number"
             value={phone}
@@ -115,13 +109,8 @@ export default function BecomeTutor() {
             style={styles.input}
           />
 
-          {/* Subjects Picker */}
           <View style={styles.pickerWrapper}>
-            <Picker
-              selectedValue={subjects}
-              onValueChange={setSubjects}
-              style={styles.picker}
-            >
+            <Picker selectedValue={subjects} onValueChange={setSubjects} style={styles.picker}>
               <Picker.Item label="Select Subject" value="" />
               <Picker.Item label="Math" value="Math" />
               <Picker.Item label="Physics" value="Physics" />
@@ -132,13 +121,8 @@ export default function BecomeTutor() {
             </Picker>
           </View>
 
-          {/* Location Picker */}
           <View style={styles.pickerWrapper}>
-            <Picker
-              selectedValue={location}
-              onValueChange={setLocation}
-              style={styles.picker}
-            >
+            <Picker selectedValue={location} onValueChange={setLocation} style={styles.picker}>
               <Picker.Item label="Select Location" value="" />
               <Picker.Item label="Lahore" value="Lahore" />
               <Picker.Item label="Karachi" value="Karachi" />
@@ -152,7 +136,6 @@ export default function BecomeTutor() {
             </Picker>
           </View>
 
-          {/* Fee input */}
           <View style={styles.inputWithIcon}>
             <Feather name="dollar-sign" size={20} color="#6b7280" style={{ marginRight: 8 }} />
             <TextInput
@@ -160,11 +143,10 @@ export default function BecomeTutor() {
               value={fee}
               onChangeText={setFee}
               keyboardType="numeric"
-              style={{ flex: 1, fontSize: 16, color: '#111827' }}
+              style={styles.feeInput}
             />
           </View>
 
-          {/* Submit button */}
           <TouchableOpacity style={styles.saveButton} onPress={handleSubmit}>
             <Feather name="check-circle" size={18} color="#fff" />
             <Text style={styles.saveText}>Save Tutor Profile</Text>
@@ -177,41 +159,50 @@ export default function BecomeTutor() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#f9fafb',
+    backgroundColor: '#f0f4f8',
     alignItems: 'center',
-    paddingBottom: 20,
+    paddingBottom: 40,
   },
   backButton: {
     position: 'absolute',
     top: 25,
     left: 10,
     zIndex: 1000,
-    backgroundColor: '#fff',
+    backgroundColor: '#ffffffee',
     borderRadius: 20,
-    padding: 5,
+    padding: 6,
     marginTop: 20,
   },
   header: {
     backgroundColor: '#007acc',
-    paddingTop: 80,
-    paddingBottom: 35,
+    paddingTop: 90,
+    paddingBottom: 40,
     width: '100%',
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
     alignItems: 'center',
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOpacity: 0.15,
+    shadowOffset: { width: 0, height: 3 },
+    shadowRadius: 5,
   },
   heading: {
-    fontSize: 22,
+    fontSize: 24,
     color: '#fff',
     fontWeight: 'bold',
   },
   card: {
     backgroundColor: '#fff',
-    marginTop: -20,
+    marginTop: -30,
     width: '90%',
     padding: 25,
     borderRadius: 16,
-    elevation: 5,
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 6,
   },
   input: {
     width: '100%',
@@ -231,6 +222,7 @@ const styles = StyleSheet.create({
     height: 120,
     fontSize: 16,
     color: '#111827',
+    textAlignVertical: 'top',
   },
   pickerWrapper: {
     width: '100%',
@@ -253,6 +245,11 @@ const styles = StyleSheet.create({
     height: 55,
     width: '100%',
   },
+  feeInput: {
+    flex: 1,
+    fontSize: 16,
+    color: '#111827',
+  },
   saveButton: {
     flexDirection: 'row',
     backgroundColor: '#007acc',
@@ -260,11 +257,14 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: '100%',
     justifyContent: 'center',
-    marginTop: 5,
+    alignItems: 'center',
+    marginTop: 10,
+    elevation: 3,
   },
   saveText: {
     color: '#fff',
     marginLeft: 8,
     fontWeight: '600',
+    fontSize: 16,
   },
 });

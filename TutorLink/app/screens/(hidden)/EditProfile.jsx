@@ -1,9 +1,10 @@
-import { Feather, MaterialIcons } from '@expo/vector-icons';
-import { Picker } from '@react-native-picker/picker';
-import * as ImagePicker from 'expo-image-picker';
-import { useRouter } from 'expo-router';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { useEffect, useState } from 'react';
+import { Feather, MaterialIcons } from "@expo/vector-icons";
+import { Picker } from "@react-native-picker/picker";
+import * as ImagePicker from "expo-image-picker";
+import { useRouter } from "expo-router";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+import { getDownloadURL, getStorage, ref, uploadBytes } from "firebase/storage";
+import { useEffect, useState } from "react";
 import {
   Alert,
   Image,
@@ -14,43 +15,44 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View,
-} from 'react-native';
-import { auth, db } from '../../../lib/firebase';
+  View
+} from "react-native";
+import { auth, db } from "../../../lib/firebase";
 
 const EditProfile = () => {
   const router = useRouter();
 
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [education, setEducation] = useState('');
-  const [subjects, setSubjects] = useState('');
-  const [fee, setFee] = useState('');
-  const [location, setLocation] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [education, setEducation] = useState("");
+  const [subjects, setSubjects] = useState("");
+  const [fee, setFee] = useState("");
+  const [location, setLocation] = useState("");
   const [profileImage, setProfileImage] = useState(null);
+  const [existingImage, setExistingImage] = useState(null);
 
-  // ✅ Fetch user data properly
   useEffect(() => {
     const fetchUserData = async () => {
       const user = auth.currentUser;
       if (user) {
         try {
-          const docRef = doc(db, 'User', user.uid);
+          const docRef = doc(db, "User", user.uid);
           const docSnap = await getDoc(docRef);
           if (docSnap.exists()) {
             const data = docSnap.data();
-            setName(data.name || '');
-            setEmail(data.email || '');
-            setPhone(data.phone || '');
-            setEducation(data.education || '');
-            setSubjects(data.subjects || '');
-            setFee(data.fee || '');
-            setLocation(data.location || '');
+            setName(data.name || "");
+            setEmail(data.email || "");
+            setPhone(data.phone || "");
+            setEducation(data.education || "");
+            setSubjects(data.subjects || "");
+            setFee(data.fee || "");
+            setLocation(data.location || "");
             setProfileImage(data.profileImage || null);
+            setExistingImage(data.profileImage || null);
           }
         } catch (error) {
-          console.error('Error loading profile:', error.message);
+          console.error("Error loading profile:", error.message);
         }
       }
     };
@@ -61,7 +63,7 @@ const EditProfile = () => {
   const handleImagePick = async () => {
     const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!permission.granted) {
-      Alert.alert('Permission Denied', 'Camera roll access is required!');
+      Alert.alert("Permission Denied", "Camera roll access is required!");
       return;
     }
 
@@ -72,48 +74,78 @@ const EditProfile = () => {
       quality: 1,
     });
 
+    console.log("ImagePicker result:", result);
     if (!result.canceled) {
       setProfileImage(result.assets[0].uri);
     }
   };
 
+ const uploadImage = async (uri, uid) => {
+  try {
+    const response = await fetch(uri);
+    const blob = await response.blob();
+    const storage = getStorage();
+    const fileRef = ref(storage, `profileImages/${uid}_${Date.now()}.jpg`);
+    await uploadBytes(fileRef, blob);
+    const downloadURL = await getDownloadURL(fileRef);
+    return downloadURL;
+  } catch (error) {
+    console.error("Upload failed:", error.message);
+    Alert.alert("Upload Error", "Failed to upload image. Please try again.");
+    throw error; // so handleSave knows it failed
+  }
+};
+
   const handleSave = async () => {
     if (!name || !phone || !education || !subjects || !location || !fee) {
-      Alert.alert('Missing Info', 'Please fill all the fields.');
+      Alert.alert("Missing Info", "Please fill all the fields.");
       return;
     }
 
     try {
       const user = auth.currentUser;
       if (user) {
-        await setDoc(doc(db, 'User', user.uid), {
-          uid: user.uid,
-          email: user.email,
-          name,
-          phone,
-          education,
-          subjects,
-          location,
-          fee,
-          profileImage: profileImage || '',
-          updatedAt: new Date().toISOString(),
-        });
+        console.log("Before save - profileImage:", profileImage);
+        console.log("Before save - existingImage:", existingImage);
 
-        Alert.alert('Success', 'Profile updated successfully!');
-        router.replace('/screens/(hidden)/HomeScreen');
-      } else {
-        Alert.alert('Error', 'User not authenticated.');
+        let imageUrl = existingImage;
+
+        // only upload a new image if user selected a different one
+        if (profileImage && profileImage !== existingImage) {
+          imageUrl = await uploadImage(profileImage, user.uid);
+          console.log("Uploaded image URL:", imageUrl);
+        }
+
+        await setDoc(
+          doc(db, "User", user.uid),
+          {
+            uid: user.uid,
+            email: user.email,
+            name,
+            phone,
+            education,
+            subjects,
+            location,
+            fee,
+            profileImage: imageUrl || "",
+            updatedAt: new Date().toISOString(),
+          },
+          { merge: true }
+        );
+
+        Alert.alert("Success", "Profile updated successfully!");
+        router.replace("/screens/(hidden)/HomeScreen");
       }
     } catch (error) {
-      console.error('Error saving profile:', error.message);
-      Alert.alert('Error', 'Failed to save profile.');
+      console.error("Error saving profile:", error.message);
+      Alert.alert("Error", "Failed to save profile.");
     }
   };
 
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
       keyboardVerticalOffset={80}
     >
       <ScrollView
@@ -121,7 +153,10 @@ const EditProfile = () => {
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        <TouchableOpacity style={styles.backButton} onPress={() => router.replace('/screens/(hidden)/HomeScreen')}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => router.replace("/screens/(hidden)/HomeScreen")}
+        >
           <MaterialIcons name="arrow-back" size={28} color="#007acc" />
         </TouchableOpacity>
 
@@ -135,21 +170,31 @@ const EditProfile = () => {
               source={
                 profileImage
                   ? { uri: profileImage }
-                  : require('../../../assets/images/placeholder.jpeg')
+                  : require("../../../assets/images/placeholder.jpeg")
               }
               style={styles.avatar}
             />
             <Text style={styles.changeText}>Change Photo</Text>
           </TouchableOpacity>
 
-          <TextInput placeholder="Full Name" value={name} onChangeText={setName} style={styles.input} />
+          <TextInput
+            placeholder="Full Name"
+            value={name}
+            onChangeText={setName}
+            style={styles.input}
+          />
           <TextInput
             placeholder="Email (read-only)"
             value={email}
             editable={false}
             style={styles.input}
           />
-          <TextInput placeholder="Phone" value={phone} onChangeText={setPhone} style={styles.input} />
+          <TextInput
+            placeholder="Phone"
+            value={phone}
+            onChangeText={setPhone}
+            style={styles.input}
+          />
           <TextInput
             placeholder="Describe your background, education, experience, etc."
             value={education}
@@ -161,7 +206,11 @@ const EditProfile = () => {
           />
 
           <View style={styles.pickerWrapper}>
-            <Picker selectedValue={subjects} onValueChange={setSubjects} style={styles.picker}>
+            <Picker
+              selectedValue={subjects}
+              onValueChange={setSubjects}
+              style={styles.picker}
+            >
               <Picker.Item label="Select Subject" value="" />
               <Picker.Item label="Math" value="Math" />
               <Picker.Item label="Physics" value="Physics" />
@@ -173,7 +222,11 @@ const EditProfile = () => {
           </View>
 
           <View style={styles.pickerWrapper}>
-            <Picker selectedValue={location} onValueChange={setLocation} style={styles.picker}>
+            <Picker
+              selectedValue={location}
+              onValueChange={setLocation}
+              style={styles.picker}
+            >
               <Picker.Item label="Select Location" value="" />
               <Picker.Item label="Lahore" value="Lahore" />
               <Picker.Item label="Karachi" value="Karachi" />
@@ -212,42 +265,42 @@ export default EditProfile;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#f9fafb',
-    alignItems: 'center',
+    backgroundColor: "#f9fafb",
+    alignItems: "center",
     paddingBottom: 15,
   },
   backButton: {
-    position: 'absolute',
+    position: "absolute",
     top: 25,
     left: 10,
     zIndex: 1000,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 20,
     padding: 5,
     marginTop: 20,
   },
   headerContainer: {
-    backgroundColor: '#007acc',
+    backgroundColor: "#007acc",
     paddingTop: 80,
     paddingBottom: 35,
     paddingHorizontal: 15,
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
-    alignItems: 'center',
-    width: '100%',
+    alignItems: "center",
+    width: "100%",
   },
   heading: {
     fontSize: 22,
-    color: 'white',
-    fontWeight: 'bold',
+    color: "white",
+    fontWeight: "bold",
   },
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     marginTop: -20,
     padding: 25,
     borderRadius: 16,
-    width: '90%',
-    alignItems: 'center',
+    width: "90%",
+    alignItems: "center",
     elevation: 5,
   },
   avatar: {
@@ -255,53 +308,53 @@ const styles = StyleSheet.create({
     height: 120,
     borderRadius: 100,
     borderWidth: 3,
-    borderColor: '#007acc',
+    borderColor: "#007acc",
     marginBottom: 10,
   },
   changeText: {
-    color: '#007acc',
+    color: "#007acc",
     marginBottom: 20,
   },
   input: {
-    width: '100%',
-    backgroundColor: '#f3f4f6',
+    width: "100%",
+    backgroundColor: "#f3f4f6",
     padding: 15,
     borderRadius: 10,
     marginBottom: 15,
     fontSize: 16,
-    color: '#111827',
+    color: "#111827",
   },
   descriptionInput: {
-    width: '100%',
-    backgroundColor: '#f3f4f6',
+    width: "100%",
+    backgroundColor: "#f3f4f6",
     padding: 15,
     borderRadius: 10,
     marginBottom: 15,
     height: 120,
-    textAlignVertical: 'top',
+    textAlignVertical: "top",
     fontSize: 16,
-    color: '#111827',
+    color: "#111827",
   },
   pickerWrapper: {
-    width: '100%',
-    backgroundColor: '#f3f4f6',
+    width: "100%",
+    backgroundColor: "#f3f4f6",
     borderRadius: 10,
     marginBottom: 15,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   picker: {
     height: 60,
-    width: '100%',
+    width: "100%",
   },
   inputWithIcon: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#f3f4f6',
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#f3f4f6",
     borderRadius: 10,
     paddingHorizontal: 15,
     marginBottom: 15,
     height: 55,
-    width: '100%',
+    width: "100%",
   },
   inputIcon: {
     marginRight: 10,
@@ -309,19 +362,19 @@ const styles = StyleSheet.create({
   inputWithIconText: {
     flex: 1,
     fontSize: 16,
-    color: '#111827',
+    color: "#111827",
   },
   saveButton: {
-    flexDirection: 'row',
-    backgroundColor: '#007acc',
+    flexDirection: "row",
+    backgroundColor: "#007acc",
     paddingVertical: 14,
     borderRadius: 10,
-    width: '100%',
-    justifyContent: 'center',
+    width: "100%",
+    justifyContent: "center",
   },
   saveText: {
-    color: '#fff',
+    color: "#fff",
     marginLeft: 8,
-    fontWeight: '600',
+    fontWeight: "600",
   },
 });

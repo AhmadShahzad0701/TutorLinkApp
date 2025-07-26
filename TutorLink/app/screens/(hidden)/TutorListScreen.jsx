@@ -18,7 +18,6 @@ const TutorListScreen = () => {
 
   const [firebaseTutors, setFirebaseTutors] = useState([]);
 
-  // 🔥 Fetch tutors from Firestore
   useEffect(() => {
     const q = query(collection(db, 'User'), where('isTutor', '==', true));
     const unsubscribe = onSnapshot(q, snapshot => {
@@ -29,7 +28,6 @@ const TutorListScreen = () => {
     return () => unsubscribe();
   }, []);
 
-  // Update filters when query params change
   useEffect(() => {
     setSelectedSubject(subject);
     setSelectedLocation(location);
@@ -41,7 +39,6 @@ const TutorListScreen = () => {
 
   const allTutors = [...tutors, ...firebaseTutors];
 
-  // Filter tutors based on dropdowns & search
   const filteredTutors = allTutors.filter(tutor => {
     const name = (tutor.name || '').toLowerCase();
     const tutorSubject = (tutor.subject || '').toLowerCase();
