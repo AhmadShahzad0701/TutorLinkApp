@@ -110,7 +110,6 @@ const EditProfile = () => {
 
         let imageUrl = existingImage;
 
-        // only upload a new image if user selected a different one
         if (profileImage && profileImage !== existingImage) {
           imageUrl = await uploadImage(profileImage, user.uid);
           console.log("Uploaded image URL:", imageUrl);

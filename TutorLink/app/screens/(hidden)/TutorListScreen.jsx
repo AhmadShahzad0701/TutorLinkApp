@@ -79,7 +79,6 @@ const TutorListScreen = () => {
 
   return (
     <View style={styles.container}>
-      {/* Filter Row */}
       <View style={styles.filterRow}>
         <View style={styles.pickerWrapper}>
           <Picker
@@ -126,7 +125,6 @@ const TutorListScreen = () => {
         </View>
       </View>
 
-      {/* Tutor List */}
       <FlatList
         data={filteredTutors}
         keyExtractor={(item) => item.id?.toString() ?? Math.random().toString()}

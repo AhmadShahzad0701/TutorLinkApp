@@ -37,7 +37,6 @@ const Profile = () => {
           }
         );
 
-        // Clean up the Firestore listener when component unmounts or user logs out
         return () => unsubscribeDoc();
       } else {
         console.log('No user logged in');

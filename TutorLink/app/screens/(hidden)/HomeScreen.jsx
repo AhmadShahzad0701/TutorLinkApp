@@ -99,7 +99,6 @@ const HomeScreen = () => {
         </View>
       </View>
 
-      {/* Recommended Tutors */}
       <View style={styles.section}>
         <View style={styles.sectionTitleRow}>
           <FontAwesome6 name="user-graduate" size={20} color="#333" />

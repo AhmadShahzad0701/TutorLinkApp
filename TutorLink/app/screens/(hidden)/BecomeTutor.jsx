@@ -1,4 +1,3 @@
-// screens/(hidden)/BecomeTutor.jsx
 import { Feather, MaterialIcons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
 import { useRouter } from 'expo-router';
