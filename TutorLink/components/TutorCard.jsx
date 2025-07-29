@@ -13,9 +13,7 @@ import {
 const TutorCard = ({ tutor }) => {
   const router = useRouter();
   const [selectedRating, setSelectedRating] = useState(tutor.rating || 0);
-
   const handleImagePress = useCallback(() => {
-    // Pass tutorId (doc id) for fetching from Firestore
     router.push({
       pathname: 'screens/(hidden)/TutorDataFetcherScreen',
       params: { tutorId: tutor.id },

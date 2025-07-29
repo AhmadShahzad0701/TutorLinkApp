@@ -41,7 +41,7 @@ const TutorListScreen = () => {
 
   const filteredTutors = allTutors.filter(tutor => {
     const name = (tutor.name || '').toLowerCase();
-    const tutorSubject = (tutor.subject || '').toLowerCase();
+    const tutorSubject = (tutor.subjects || '').toLowerCase();
     const tutorLocation = (tutor.location || '').toLowerCase();
 
     const matchSubject = selectedSubject
