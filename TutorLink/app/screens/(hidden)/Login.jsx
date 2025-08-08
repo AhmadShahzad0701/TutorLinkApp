@@ -4,6 +4,8 @@ import { useState } from 'react';
 import {
   Alert,
   Image,
+  KeyboardAvoidingView,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -11,90 +13,168 @@ import {
   TouchableOpacity
 } from 'react-native';
 import { auth } from '../../../lib/firebase';
+
 const Login = () => {
   const router = useRouter();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  // Email validation function
+  const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
-  const handleLogin = async (e) => {
-    if (!email || !password) {
-      Alert.alert('Error', 'Please enter both email and password.');
+  // Custom error message handler
+  const getErrorMessage = (errorCode) => {
+    switch (errorCode) {
+      case 'auth/user-not-found':
+        return 'No account found with this email address. Please check your email or sign up.';
+      case 'auth/wrong-password':
+        return 'Incorrect password. Please try again.';
+      case 'auth/invalid-email':
+        return 'Please enter a valid email address.';
+      case 'auth/user-disabled':
+        return 'This account has been disabled. Please contact support.';
+      case 'auth/too-many-requests':
+        return 'Too many failed login attempts. Please wait a moment and try again.';
+      case 'auth/network-request-failed':
+        return 'Network error. Please check your internet connection and try again.';
+      case 'auth/invalid-credential':
+        return 'Invalid email or password. Please double-check your credentials and try again.';
+      case 'auth/missing-password':
+        return 'Please enter your password.';
+      case 'auth/weak-password':
+        return 'Password should be at least 6 characters long.';
+      case 'auth/email-already-in-use':
+        return 'An account with this email already exists.';
+      case 'auth/operation-not-allowed':
+        return 'Email/password accounts are not enabled. Please contact support.';
+      default:
+        return 'Login failed. Please check your email and password and try again.';
+    }
+  };
+
+  const handleLogin = async () => {
+    // Basic validation
+    if (!email.trim()) {
+      Alert.alert('Validation Error', 'Please enter your email address.');
       return;
     }
 
-    e.preventDefault();
-    try {
+    if (!password) {
+      Alert.alert('Validation Error', 'Please enter your password.');
+      return;
+    }
 
-      await signInWithEmailAndPassword(auth, email, password);
+    // Email format validation
+    if (!isValidEmail(email.trim())) {
+      Alert.alert('Validation Error', 'Please enter a valid email address.');
+      return;
+    }
+
+    // Password length validation
+    if (password.length < 6) {
+      Alert.alert('Validation Error', 'Password must be at least 6 characters long.');
+      return;
+    }
+
+    try {
+      await signInWithEmailAndPassword(auth, email.trim().toLowerCase(), password);
       Alert.alert('Login Success', 'Welcome back!');
       router.replace('/screens/(hidden)/HomeScreen');
 
+      // Clear form on success
       setEmail('');
       setPassword('');
 
+    } catch (error) {
+      // Only log error code for debugging, not the full error
+      console.log('Login failed with error code:', error.code);
+      
+      // Show user-friendly error message
+      const errorMessage = getErrorMessage(error.code);
+      Alert.alert('Login Failed', errorMessage);
     }
-    catch (error) {
-      console.error(error.message);
-      Alert.alert('Error', error.message);
-    }
-
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <KeyboardAvoidingView
+      style={styles.keyboardAvoidingView}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
+    >
+      <ScrollView 
+        contentContainerStyle={styles.container}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+      >
+        <Image
+          source={require('../../../assets/images/Logo.png')}
+          style={styles.logo}
+        />
+        <Text style={styles.heading}>Welcome Back</Text>
 
+        <TextInput
+          placeholder="Email"
+          value={email}
+          onChangeText={(text) => setEmail(text.trim())}
+          keyboardType="email-address"
+          autoCapitalize="none"
+          autoCorrect={false}
+          returnKeyType="next"
+          style={[
+            styles.input,
+            email && !isValidEmail(email) && styles.inputError
+          ]}
+        />
+        
+        <TextInput
+          placeholder="Password"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+          returnKeyType="done"
+          onSubmitEditing={handleLogin}
+          style={[
+            styles.input,
+            password && password.length < 6 && styles.inputError
+          ]}
+        />
 
-      <Image
-        source={require('../../../assets/images/Logo.png')}
-        style={styles.logo}
-      />
-      <Text style={styles.heading}>Welcome Back</Text>
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+          <Text style={styles.buttonText}>Login</Text>
+        </TouchableOpacity>
 
-      <TextInput
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-        style={styles.input}
-      />
-
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Login</Text>
-      </TouchableOpacity>
-
-      <Text style={styles.footerText}>
-        Don’t have an account?{' '}
-        <Text
-          style={styles.link}
-          onPress={() => router.push('/screens/(hidden)/SignUp')}
-        >
-          Sign Up
+        <Text style={styles.footerText}>
+          Don't have an account?{' '}
+          <Text
+            style={styles.link}
+            onPress={() => router.push('/screens/(hidden)/SignUp')}
+          >
+            Sign Up
+          </Text>
         </Text>
-      </Text>
-    </ScrollView>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
 export default Login;
 
 const styles = StyleSheet.create({
+  keyboardAvoidingView: {
+    flex: 1,
+    backgroundColor: '#f9fafb',
+  },
   container: {
     flexGrow: 1,
-    backgroundColor: '#f9fafb',
     justifyContent: 'center',
     alignItems: 'center',
     paddingVertical: 50,
     paddingHorizontal: 25,
+    minHeight: '100%',
   },
   logo: {
     width: 120,
@@ -119,6 +199,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     marginBottom: 15,
     fontSize: 16,
+  },
+  inputError: {
+    borderColor: '#ef4444',
+    borderWidth: 1.5,
   },
   button: {
     width: '100%',
@@ -154,4 +238,3 @@ const styles = StyleSheet.create({
     zIndex: 10,
   }
 });
-

@@ -90,8 +90,8 @@ export default function Layout() {
       <Drawer.Screen
         name="screens/(hidden)/Login"
         options={{
-          title: 'Login',
-          drawerLabel: 'Login',
+          title: 'Logout',
+          drawerLabel: 'Logout',
           drawerIcon: ({ color, size }) => (
             <FontAwesome name="sign-in" size={size} color={color} />
           ),
