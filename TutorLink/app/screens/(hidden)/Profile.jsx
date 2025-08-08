@@ -4,6 +4,7 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import {
+  ActivityIndicator,
   Image,
   ScrollView,
   StyleSheet,
@@ -16,40 +17,66 @@ import { auth, db } from '../../../lib/firebase';
 const Profile = () => {
   const router = useRouter();
   const [userDetails, setUserDetails] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Auth state listener
     const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
       if (user) {
+        console.log("User authenticated:", user.uid);
+        
         // Real-time listener for user document
         const docRef = doc(db, 'User', user.uid);
         const unsubscribeDoc = onSnapshot(
           docRef,
           (docSnap) => {
             if (docSnap.exists()) {
-              setUserDetails(docSnap.data());
+              const userData = docSnap.data();
+              console.log("User data loaded:", userData);
+              console.log("Profile image URL:", userData.profileImage);
+              setUserDetails(userData);
             } else {
               console.log('User document not found');
+              setUserDetails(null);
             }
+            setLoading(false);
           },
           (error) => {
             console.error('Error fetching user data:', error.message);
+            setLoading(false);
           }
         );
 
         return () => unsubscribeDoc();
       } else {
         console.log('No user logged in');
+        setUserDetails(null);
+        setLoading(false);
       }
     });
 
     return () => unsubscribeAuth();
   }, []);
 
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#007acc" />
+        <Text style={styles.loadingText}>Loading profile...</Text>
+      </View>
+    );
+  }
+
   if (!userDetails) {
     return (
       <View style={styles.loadingContainer}>
-        <Text style={{ fontSize: 18, color: '#6b7280' }}>Loading profile...</Text>
+        <Text style={styles.errorText}>Profile not found</Text>
+        <TouchableOpacity
+          style={styles.editButton}
+          onPress={() => router.push('/screens/(hidden)/EditProfile')}
+        >
+          <Text style={styles.editText}>Create Profile</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -70,7 +97,7 @@ const Profile = () => {
       <Feather name={icon} size={18} color={color} style={styles.icon} />
       <View style={styles.infoBlock}>
         <Text style={styles.label}>{label}</Text>
-        <Text style={styles.info}>{value}</Text>
+        <Text style={styles.info}>{value || 'Not specified'}</Text>
       </View>
     </View>
   );
@@ -92,14 +119,22 @@ const Profile = () => {
       </View>
 
       <View style={styles.card}>
-        <Image
-          source={
-            profileImage
-              ? { uri: profileImage }
-              : require('../../../assets/images/placeholder.jpeg')
-          }
-          style={styles.avatar}
-        />
+        <View style={styles.avatarContainer}>
+          <Image
+            source={
+              profileImage && profileImage.trim() !== ''
+                ? { uri: profileImage }
+                : require('../../../assets/images/placeholder.jpeg')
+            }
+            style={styles.avatar}
+            onError={(error) => {
+              console.log('Image load error:', error.nativeEvent.error);
+            }}
+            onLoad={() => {
+              console.log('Image loaded successfully:', profileImage);
+            }}
+          />
+        </View>
 
         <Text style={styles.name}>{name}</Text>
         <Text style={styles.role}>Professional Tutor</Text>
@@ -111,7 +146,12 @@ const Profile = () => {
           <InfoRow icon="phone" label="Phone" value={phone} color="#10B981" />
           <InfoRow icon="book-open" label="Description" value={education} color="#F59E0B" />
           <InfoRow icon="layers" label="Subjects" value={subjects} color="#EC4899" />
-          <InfoRow icon="dollar-sign" label="Fee" value={fee} color="#F43F5E" />
+          <InfoRow 
+            icon="dollar-sign" 
+            label="Fee" 
+            value={fee && fee !== 'N/A' ? `Rs ${fee}/hour` : 'Not set'} 
+            color="#F43F5E" 
+          />
           <InfoRow icon="map-pin" label="Location" value={location} color="#3B82F6" />
         </View>
 
@@ -140,6 +180,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#f9fafb',
+  },
+  loadingText: {
+    fontSize: 16,
+    color: '#6b7280',
+    marginTop: 10,
+  },
+  errorText: {
+    fontSize: 18,
+    color: '#ef4444',
+    marginBottom: 20,
   },
   backButton: {
     position: 'absolute',
@@ -174,14 +224,26 @@ const styles = StyleSheet.create({
     width: '90%',
     alignItems: 'center',
     elevation: 5,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 3 },
+    shadowRadius: 5,
   },
-  avatar: {
+  avatarContainer: {
     width: 120,
     height: 120,
-    borderRadius: 100,
+    borderRadius: 60,
     borderWidth: 3,
     borderColor: '#007acc',
+    backgroundColor: '#f3f4f6',
+    justifyContent: 'center',
+    alignItems: 'center',
     marginBottom: 10,
+  },
+  avatar: {
+    width: 114,
+    height: 114,
+    borderRadius: 57,
   },
   name: {
     fontSize: 24,
@@ -222,18 +284,23 @@ const styles = StyleSheet.create({
   info: {
     fontSize: 16,
     color: '#4b5563',
+    marginTop: 2,
   },
   editButton: {
     flexDirection: 'row',
     backgroundColor: '#007acc',
     paddingVertical: 14,
+    paddingHorizontal: 20,
     borderRadius: 10,
     width: '100%',
     justifyContent: 'center',
+    alignItems: 'center',
     marginTop: 30,
   },
   editText: {
     color: '#fff',
     marginLeft: 8,
+    fontSize: 16,
+    fontWeight: '600',
   },
 });

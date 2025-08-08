@@ -127,7 +127,10 @@ const TutorListScreen = () => {
 
       <FlatList
         data={filteredTutors}
-        keyExtractor={(item) => item.id?.toString() ?? Math.random().toString()}
+        keyExtractor={(item, index) => {
+          // Use id for Firebase tutors, email for static tutors, or fallback to index
+          return item.id || item.email || index.toString();
+        }}
         renderItem={({ item }) => <TutorCard tutor={item} />}
         contentContainerStyle={{ paddingBottom: 40, paddingHorizontal: 15 }}
         showsVerticalScrollIndicator={false}

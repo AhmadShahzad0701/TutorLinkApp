@@ -1,8 +1,9 @@
-
+// lib/firebase.js
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getApp, getApps, initializeApp } from "firebase/app";
 import { getAuth, getReactNativePersistence, initializeAuth } from 'firebase/auth';
 import { getFirestore } from "firebase/firestore";
+import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
   apiKey: "AIzaSyDbxnjtTjwlh7RjRA3ocJGttMkdb15ApJ4",
@@ -13,8 +14,10 @@ const firebaseConfig = {
   appId: "1:736175499828:web:12da09e77c20e65d4b3861",
 };
 
+// Initialize Firebase
 const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 
+// Initialize Firebase Auth with AsyncStorage persistence
 let auth;
 try {
   auth = initializeAuth(app, {
@@ -24,7 +27,32 @@ try {
   auth = getAuth(app);
 }
 
+// Initialize Firestore
 const db = getFirestore(app);
 
-export { app, auth, db };
+// Initialize Storage
+const storage = getStorage(app);
 
+// Test Firebase connection
+export const testFirebaseConnection = async () => {
+  try {
+    console.log("Testing Firebase connection...");
+    console.log("App name:", app.name);
+    console.log("Project ID:", app.options.projectId);
+    console.log("Storage bucket:", app.options.storageBucket);
+    
+    // Test auth
+    console.log("Auth instance:", !!auth);
+    console.log("Current user:", auth.currentUser?.uid || 'No user');
+    
+    // Test storage
+    console.log("Storage instance:", !!storage);
+    
+    return true;
+  } catch (error) {
+    console.error("Firebase connection test failed:", error);
+    return false;
+  }
+};
+
+export { app, auth, db, storage };

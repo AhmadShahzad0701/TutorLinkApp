@@ -17,7 +17,7 @@ import { db } from '../../../lib/firebase';
 
 const TutorDataFetcherScreen = () => {
   const router = useRouter();
-  const { tutorId } = useLocalSearchParams();
+  const { tutorId, tutorData } = useLocalSearchParams();
 
   const [tutor, setTutor] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -25,14 +25,23 @@ const TutorDataFetcherScreen = () => {
   useEffect(() => {
     const fetchTutor = async () => {
       try {
-        if (!tutorId) {
+        if (tutorData) {
+          // Static tutor data passed directly
+          const parsedTutor = JSON.parse(tutorData);
+          setTutor(parsedTutor);
           setLoading(false);
           return;
         }
-        const ref = doc(db, 'User', tutorId);
-        const snap = await getDoc(ref);
-        if (snap.exists()) {
-          setTutor(snap.data());
+
+        if (tutorId) {
+          // Firebase tutor - fetch from database
+          const ref = doc(db, 'User', tutorId);
+          const snap = await getDoc(ref);
+          if (snap.exists()) {
+            setTutor(snap.data());
+          } else {
+            setTutor(null);
+          }
         } else {
           setTutor(null);
         }
@@ -43,8 +52,9 @@ const TutorDataFetcherScreen = () => {
         setLoading(false);
       }
     };
+    
     fetchTutor();
-  }, [tutorId]);
+  }, [tutorId, tutorData]);
 
   const copyToClipboard = async (value) => {
     if (!value) return;
@@ -111,8 +121,8 @@ const TutorDataFetcherScreen = () => {
         <View style={styles.avatarContainer}>
           <Image
             source={
-              tutor.profileImage
-                ? { uri: tutor.profileImage }
+              tutor.profileImage || tutor.imageUrl
+                ? { uri: tutor.profileImage || tutor.imageUrl }
                 : require('../../../assets/images/placeholder.jpeg')
             }
             style={styles.avatar}
@@ -211,12 +221,11 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     width: '90%',
     alignItems: 'center',
-    elevation: 5, // ✅ for Android/iOS
+    elevation: 5,
     shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 3 },
     shadowRadius: 5,
-    // ✅ Web-friendly shadow
     boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
   },
   avatarContainer: {

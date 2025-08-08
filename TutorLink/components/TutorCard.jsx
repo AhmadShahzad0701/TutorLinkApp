@@ -13,12 +13,23 @@ import {
 const TutorCard = ({ tutor }) => {
   const router = useRouter();
   const [selectedRating, setSelectedRating] = useState(tutor.rating || 0);
+  
   const handleImagePress = useCallback(() => {
-    router.push({
-      pathname: 'screens/(hidden)/TutorDataFetcherScreen',
-      params: { tutorId: tutor.id },
-    });
-  }, [router, tutor.id]);
+    // Check if it's a Firebase tutor (has id) or static tutor
+    if (tutor.id) {
+      // Firebase tutor - pass tutorId
+      router.push({
+        pathname: '/screens/(hidden)/TutorDataFetcherScreen',
+        params: { tutorId: tutor.id },
+      });
+    } else {
+      // Static tutor - pass all tutor data
+      router.push({
+        pathname: '/screens/(hidden)/TutorDataFetcherScreen',
+        params: { tutorData: JSON.stringify(tutor) },
+      });
+    }
+  }, [router, tutor]);
 
   const handleStarPress = useCallback((star) => {
     setSelectedRating(star);
@@ -32,8 +43,8 @@ const TutorCard = ({ tutor }) => {
           <View style={styles.imageHalf}>
             <Image
               source={
-                tutor.imageUrl
-                  ? { uri: tutor.imageUrl }
+                tutor.imageUrl || tutor.profileImage
+                  ? { uri: tutor.imageUrl || tutor.profileImage }
                   : require('../assets/images/placeholder.jpeg')
               }
               style={styles.avatar}
