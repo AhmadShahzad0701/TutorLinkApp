@@ -1,4 +1,3 @@
-// 
 import { Feather, FontAwesome5, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -20,23 +19,23 @@ const TutorListScreen = () => {
   const [firebaseTutors, setFirebaseTutors] = useState([]);
 
   useEffect(() => {
-    let q = query(collection(db, 'User'), where('isTutor', '==', true));
-
-    if (selectedSubject) {
-      q = query(q, where('subjects', '==', selectedSubject));
-    }
-
-    if (selectedLocation) {
-      q = query(q, where('location', '==', selectedLocation));
-    }
-
+    const q = query(collection(db, 'User'), where('isTutor', '==', true));
     const unsubscribe = onSnapshot(q, snapshot => {
       const fetched = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setFirebaseTutors(fetched);
     });
 
     return () => unsubscribe();
-  }, [selectedSubject, selectedLocation]);
+  }, []);
+
+  useEffect(() => {
+    setSelectedSubject(subject);
+    setSelectedLocation(location);
+    return () => {
+      setSelectedSubject('');
+      setSelectedLocation('');
+    };
+  }, [subject, location]);
 
   const allTutors = [...tutors, ...firebaseTutors];
 
@@ -45,13 +44,19 @@ const TutorListScreen = () => {
     const tutorSubject = (tutor.subjects || '').toLowerCase();
     const tutorLocation = (tutor.location || '').toLowerCase();
 
+    const matchSubject = selectedSubject
+      ? tutorSubject === selectedSubject.toLowerCase()
+      : true;
+    const matchLocation = selectedLocation
+      ? tutorLocation === selectedLocation.toLowerCase()
+      : true;
     const matchSearch = search
       ? name.includes(search.toLowerCase()) ||
         tutorSubject.includes(search.toLowerCase()) ||
         tutorLocation.includes(search.toLowerCase())
       : true;
 
-    return matchSearch;
+    return matchSubject && matchLocation && matchSearch;
   });
 
   const displayTitle = selectedSubject || selectedLocation || search || 'All';

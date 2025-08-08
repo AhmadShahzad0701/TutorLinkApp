@@ -16,7 +16,7 @@ const TutorCard = ({ tutor }) => {
   const handleImagePress = useCallback(() => {
     router.push({
       pathname: 'screens/(hidden)/TutorDataFetcherScreen',
-      params: { tutorId: tutor.id.toString() },
+      params: { tutorId: tutor.id },
     });
   }, [router, tutor.id]);
 

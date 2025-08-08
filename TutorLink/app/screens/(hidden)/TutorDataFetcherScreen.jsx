@@ -13,7 +13,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { tutors } from '../../../data';
 import { db } from '../../../lib/firebase';
 
 const TutorDataFetcherScreen = () => {
@@ -30,22 +29,12 @@ const TutorDataFetcherScreen = () => {
           setLoading(false);
           return;
         }
-
-        const tutorIdStr = Array.isArray(tutorId) ? tutorId[0] : tutorId; // ✅ Fixed: ensure string
-
-        const ref = doc(db, 'User', tutorIdStr);
+        const ref = doc(db, 'User', tutorId);
         const snap = await getDoc(ref);
-
         if (snap.exists()) {
           setTutor(snap.data());
         } else {
-          const staticTutor = tutors.find(t => t.id === tutorIdStr);
-          if (staticTutor) {
-            setTutor(staticTutor);
-          } else {
-            console.log('Tutor not found');
-            setTutor(null);
-          }
+          setTutor(null);
         }
       } catch (e) {
         console.error('Fetch tutor error:', e);
@@ -54,7 +43,6 @@ const TutorDataFetcherScreen = () => {
         setLoading(false);
       }
     };
-
     fetchTutor();
   }, [tutorId]);
 
@@ -223,11 +211,12 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     width: '90%',
     alignItems: 'center',
-    elevation: 5,
+    elevation: 5, // ✅ for Android/iOS
     shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 3 },
     shadowRadius: 5,
+    // ✅ Web-friendly shadow
     boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
   },
   avatarContainer: {
